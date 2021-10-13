@@ -32,6 +32,8 @@ namespace VMS.TPS
             string beamID = string.Empty;
             double G_First = new double();
             double G_Last = new double();
+            int dummy = new int; dummy = 0;
+
             List<String> TreatmentBeam = new List<String>();
             List<String> SetupBeam = new List<String>();
             foreach (Beam beam in context.PlanSetup.Beams)
@@ -40,7 +42,20 @@ namespace VMS.TPS
                 if (beam.IsSetupField == true) SetupBeam.Add(beam.Id.Substring(0, beam.Id.Length));
             }
             var TxBeam = context.PlanSetup.Beams.Where(s => TreatmentBeam.Contains(GetBeamID(s))).ToList();
-            var SBeam = context.PlanSetup.Beams.Where(s => TreatmentBeam.Contains(GetBeamID(s))).ToList();
+            var SBeam = context.PlanSetup.Beams.Where(s => SetupBeam.Contains(GetBeamID(s))).ToList();
+            if (SetupBeam.Count == 3)
+            {
+                foreach (Beam beam in SBeam)
+                    switch(Convert.ToInt32(beam.ControlPoints.First().GantryAngle))
+                    {
+                        case 0:
+                        case 90:
+                        case 270:
+                            dummy = dummy +1;
+                            break;
+                    }
+            }
+
             foreach (Beam beam in TxBeam)
             {
                 switch (beam.MLCPlanType.ToString())
@@ -56,16 +71,8 @@ namespace VMS.TPS
                     break;
                 }      
              }
-            foreach (Beam beam in SBeam)
-            {
-                if (SetupBeam.Count == 3)
-                {
 
-                }
-            }
             string msg = string.Format("Check Beam Names \n\nSetupG0\t---->New\nSetupG90\t---->New\nCBCT\t---->New{0}", beamID);
-                //msg +=string.Format("{0}",dummy1);
-                //msg +=string.Format("{0},{1},{2},{3}",beam.Id,gantryangle,collimatorangle,couchangle);
             MessageBoxResult Result = System.Windows.MessageBox.Show(msg, "NamerGenie", MessageBoxButton.YesNoCancel, (MessageBoxImage)System.Windows.Forms.MessageBoxIcon.Information);
             if (Result == MessageBoxResult.Yes)
             {
