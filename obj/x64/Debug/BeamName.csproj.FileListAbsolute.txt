@@ -8,4 +8,3 @@ C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.esapi_Markup
 C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.esapi_MarkupCompile.lref
 C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\UserControl1.baml
 C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.esapi.g.resources
-C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.csproj.AssemblyReference.cache

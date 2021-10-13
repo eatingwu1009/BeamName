@@ -23,6 +23,7 @@ namespace BeamName
         public UserControl1()
         {
             InitializeComponent();
+            DataContext = this;
         }
     }
 }
