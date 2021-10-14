@@ -34,6 +34,7 @@ namespace VMS.TPS
             double G_First = new double();
             double G_Last = new double();
             int dummy = new int(); dummy = 0;
+            int a = new int(); a = 1;
 
             List<String> TreatmentBeam = new List<String>();
             List<String> SetupBeam = new List<String>();
@@ -72,7 +73,7 @@ namespace VMS.TPS
                         switch (beam.MLCPlanType.ToString())
                         {
                             case "Static":
-                                beamID += "\n" + GetBeamID(beam) + "\t---->G" + beam.ControlPoints.First().GantryAngle;
+                                beamID += "\n" + GetBeamID(beam) + "\t---->1-"+ a + "G" + beam.ControlPoints.First().GantryAngle;
                                 break;
 
                             default:
@@ -81,6 +82,7 @@ namespace VMS.TPS
                                 beamID += "\n" + GetBeamID(beam) + "\t---->G" + G_First + "-G" + G_Last;
                                 break;
                         }
+                        a = a + 1;
                     }
                     msg = string.Format("Check Beam Names \n\n{0}", beamID);
                 }
@@ -92,15 +94,16 @@ namespace VMS.TPS
                     switch (beam.MLCPlanType.ToString())
                     {
                         case "Static":
-                            beamID += "\n" + GetBeamID(beam) + "\t---->G" + beam.ControlPoints.First().GantryAngle;
+                            beamID += "\n" + GetBeamID(beam) + "\t---->1-" + a + "G" + beam.ControlPoints.First().GantryAngle;
                             break;
 
                         default:
                             G_First = Convert.ToInt32((beam.ControlPoints.First().GantryAngle));
                             G_Last = Convert.ToInt32((beam.ControlPoints.Last().GantryAngle));
-                            beamID += "\n" + GetBeamID(beam) + "\t---->G" + G_First + "-G" + G_Last;
+                            beamID += "\n" + GetBeamID(beam) + "\t---->1-" + a + "G" + G_First + "-G" + G_Last;
                             break;
                     }
+                    a = a + 1;
                 }
                 msg = string.Format("Check Beam Names \n\nSetupG0\t---->New\nSetupG90\t---->New\nCBCT\t---->New{0}", beamID);
             }
