@@ -44,9 +44,10 @@ namespace VMS.TPS
             }
             var TxBeam = context.PlanSetup.Beams.Where(s => TreatmentBeam.Contains(GetBeamID(s))).ToList();
             var SBeam = context.PlanSetup.Beams.Where(s => SetupBeam.Contains(GetBeamID(s))).ToList();
-            var CBCT = SBeam.Where(o => o.ControlPoints.First().GantryAngle.Equals(0)).Last();//find the beam id here
+        
             if (SetupBeam.Count == 3)
             {
+                var CBCT = SBeam.Where(o => o.ControlPoints.First().GantryAngle.Equals(0)).Last();//find the beam id here
                 foreach (Beam beam in SBeam)
                     switch(Convert.ToInt32(beam.ControlPoints.First().GantryAngle))
                     {
@@ -56,38 +57,36 @@ namespace VMS.TPS
                             dummy = dummy +1;
                             break;
                     }
-            }
-
-            if (dummy ==3||dummy ==4)
-            {
-                foreach (Beam beam in SBeam) if (!SBeam.Contains(CBCT))
+                if (dummy == 3 || dummy == 4)
                 {
-                  beamID += "\n" + GetBeamID(beam) + "\t---->SetupG" + beam.ControlPoints.First().GantryAngle;
-                }
-                foreach (Beam beam in SBeam) if (SBeam.Contains(CBCT))
-                    {
-                  beamID += "\n" + GetBeamID(beam) + "\t---->CBCT" + beam.ControlPoints.First().GantryAngle;
-                }
+                    foreach (Beam beam in SBeam) if (GetBeamID(beam) != GetBeamID(CBCT))
+                        {
+                            beamID += "\n" + GetBeamID(beam) + "\t---->SetupG" + beam.ControlPoints.First().GantryAngle;
+                        }
+                    foreach (Beam beam in SBeam) if (GetBeamID(beam) == GetBeamID(CBCT))
+                        {
+                            beamID += "\n" + GetBeamID(beam) + "\t---->CBCT";
+                        }
                     foreach (Beam beam in TxBeam)
-                {
-                    switch (beam.MLCPlanType.ToString())
                     {
-                        case "Static":
-                            beamID += "\n" + GetBeamID(beam) + "\t---->G" + beam.ControlPoints.First().GantryAngle;
-                            break;
+                        switch (beam.MLCPlanType.ToString())
+                        {
+                            case "Static":
+                                beamID += "\n" + GetBeamID(beam) + "\t---->G" + beam.ControlPoints.First().GantryAngle;
+                                break;
 
-                        default:
-                            G_First = Convert.ToInt32((beam.ControlPoints.First().GantryAngle));
-                            G_Last = Convert.ToInt32((beam.ControlPoints.Last().GantryAngle));
-                            beamID += "\n" + GetBeamID(beam) + "\t---->G" + G_First + "-G" + G_Last;
-                            break;
+                            default:
+                                G_First = Convert.ToInt32((beam.ControlPoints.First().GantryAngle));
+                                G_Last = Convert.ToInt32((beam.ControlPoints.Last().GantryAngle));
+                                beamID += "\n" + GetBeamID(beam) + "\t---->G" + G_First + "-G" + G_Last;
+                                break;
+                        }
                     }
+                    msg = string.Format("Check Beam Names \n\n{0}", beamID);
                 }
-                msg = string.Format("Check Beam Names \n\n{0}", beamID);
             }
-            if (dummy != 3 && dummy != 4)
-            {
-
+            if (SetupBeam.Count != 3)
+            { 
                 foreach (Beam beam in TxBeam)
                 {
                     switch (beam.MLCPlanType.ToString())
