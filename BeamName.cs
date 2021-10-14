@@ -128,11 +128,16 @@ namespace VMS.TPS
                 context.Patient.BeginModifications();
                 string Something = string.Join(",",BeamName);
                 System.Windows.Forms.MessageBox.Show(Something.Trim());
-                //foreach (Beam beam in context.PlanSetup.Beams)
-                //{
-                //    beam.Id = BeamName[a];
-                //    a = a + 1;
-                //}
+                foreach (Beam beam in context.PlanSetup.Beams) if (beam.IsSetupField == true)
+                {
+                    beam.Id = BeamName[a];
+                    a = a + 1;
+                }
+                foreach (Beam beam in context.PlanSetup.Beams) if (beam.IsSetupField != true)
+                {
+                    beam.Id = BeamName[a];
+                    a = a + 1;
+                }
 
             }
             if (Result == MessageBoxResult.No)
