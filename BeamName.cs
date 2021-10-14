@@ -48,7 +48,7 @@ namespace VMS.TPS
         
             if (SetupBeam.Count == 3)
             {
-                var CBCT = SBeam.Where(o => o.ControlPoints.First().GantryAngle.Equals(0)).Last();//find the beam id here
+                var CBCT = SBeam.Where(o => o.ControlPoints.First().GantryAngle.Equals(0)).Last();
                 foreach (Beam beam in SBeam)
                     switch(Convert.ToInt32(beam.ControlPoints.First().GantryAngle))
                     {
@@ -79,7 +79,7 @@ namespace VMS.TPS
                             default:
                                 G_First = Convert.ToInt32((beam.ControlPoints.First().GantryAngle));
                                 G_Last = Convert.ToInt32((beam.ControlPoints.Last().GantryAngle));
-                                beamID += "\n" + GetBeamID(beam) + "\t---->G" + G_First + "-G" + G_Last;
+                                beamID += "\n" + GetBeamID(beam) + "\t---->1-" + a + "G" + G_First + "-G" + G_Last;
                                 break;
                         }
                         a = a + 1;
@@ -114,6 +114,9 @@ namespace VMS.TPS
                 window.Title = "BeamNamer";
                 window.Height = 480;
                 window.Width = 420;
+
+                context.Patient.BeginModifications();
+
             }
             if (Result == MessageBoxResult.No)
             {
