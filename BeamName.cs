@@ -18,10 +18,15 @@ using BeamName;
 // TODO: Uncomment the following line if the script requires write access.
 [assembly: ESAPIScript(IsWriteable = true)]
 
+
 namespace VMS.TPS
 {
     public class Script
     {
+        public object BeamParameters { get; private set; }
+        public VRect<double> JawPositions { get; set; }
+
+
         public Script()
         {
         }
@@ -35,8 +40,10 @@ namespace VMS.TPS
             double G_Last = new double();
             int dummy = new int(); dummy = 0;
             int a = new int(); a = 1;
+            JawPositions = new VRect<double>();
 
-            List<String> TreatmentBeam = new List<String>();
+
+        List<String> TreatmentBeam = new List<String>();
             List<String> SetupBeam = new List<String>();
             List<String> BeamName = new List<String>();
             foreach (Beam beam in context.PlanSetup.Beams)
@@ -122,33 +129,37 @@ namespace VMS.TPS
                 a = 0;
                 window.Content = new UserControl1();
                 window.Title = "BeamNamer";
-                window.Height = 480;
-                window.Width = 420;
+                window.Height = 385;
+                window.Width = 580;
+
 
                 context.Patient.BeginModifications();
-                string Something = string.Join(",",BeamName);
+                string Something = string.Join(",", BeamName);
                 System.Windows.Forms.MessageBox.Show(Something.Trim());
                 foreach (Beam beam in context.PlanSetup.Beams) if (beam.IsSetupField == true)
-                {
-                    beam.Id = BeamName[a];
-                    a = a + 1;
-                }
+                    {
+                        beam.Id = BeamName[a];
+                        //beam.ApplyParameters = ;
+                        a = a + 1;
+                    }
                 foreach (Beam beam in context.PlanSetup.Beams) if (beam.IsSetupField != true)
-                {
-                    beam.Id = BeamName[a];
-                    a = a + 1;
-                }
+                    {
+                        beam.Id = BeamName[a];
+                        a = a + 1;
+                    }
 
             }
             if (Result == MessageBoxResult.No)
             {
                 window.Content = new UserControl1();
                 window.Title = "BeamNamer";
-                window.Height = 480;
-                window.Width = 420;
+                window.Height = 385;
+                window.Width = 580;
             }
         }
 
         private static string GetBeamID(Beam beam) => beam.Id.Substring(0, beam.Id.Length);
+        //public void SetJawPositions (VRect<double> positions);
+
     }
 }
