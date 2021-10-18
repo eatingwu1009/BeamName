@@ -43,7 +43,7 @@ namespace VMS.TPS
             JawPositions = new VRect<double>();
 
 
-        List<String> TreatmentBeam = new List<String>();
+            List<String> TreatmentBeam = new List<String>();
             List<String> SetupBeam = new List<String>();
             List<String> BeamName = new List<String>();
             foreach (Beam beam in context.PlanSetup.Beams)
@@ -53,17 +53,17 @@ namespace VMS.TPS
             }
             var TxBeam = context.PlanSetup.Beams.Where(s => TreatmentBeam.Contains(GetBeamID(s))).ToList();
             var SBeam = context.PlanSetup.Beams.Where(s => SetupBeam.Contains(GetBeamID(s))).ToList();
-        
+
             if (SetupBeam.Count == 3)
             {
                 var CBCT = SBeam.Where(o => o.ControlPoints.First().GantryAngle.Equals(0)).Last();
                 foreach (Beam beam in SBeam)
-                    switch(Convert.ToInt32(beam.ControlPoints.First().GantryAngle))
+                    switch (Convert.ToInt32(beam.ControlPoints.First().GantryAngle))
                     {
                         case 0:
                         case 90:
                         case 270:
-                            dummy = dummy +1;
+                            dummy = dummy + 1;
                             break;
                     }
                 if (dummy == 3 || dummy == 4)
@@ -84,7 +84,7 @@ namespace VMS.TPS
                         {
                             case "Static":
                                 G_First = Convert.ToInt32((beam.ControlPoints.First().GantryAngle));
-                                beamID += "\n" + GetBeamID(beam) + "\t---->1-"+ a + "G" + beam.ControlPoints.First().GantryAngle;
+                                beamID += "\n" + GetBeamID(beam) + "\t---->1-" + a + "G" + beam.ControlPoints.First().GantryAngle;
                                 BeamName.Add("1-" + a + "G" + G_First);
                                 break;
 
@@ -101,7 +101,7 @@ namespace VMS.TPS
                 }
             }
             if (SetupBeam.Count != 3)
-            { 
+            {
                 foreach (Beam beam in TxBeam)
                 {
                     switch (beam.MLCPlanType.ToString())
@@ -124,37 +124,40 @@ namespace VMS.TPS
                 msg = string.Format("Check Beam Names \n\nSetupG0\t---->New\nSetupG90\t---->New\nCBCT\t---->New{0}", beamID);
             }
             MessageBoxResult Result = System.Windows.MessageBox.Show(msg, "NamerGenie", MessageBoxButton.YesNoCancel, (MessageBoxImage)System.Windows.Forms.MessageBoxIcon.Information);
-            if (Result == MessageBoxResult.Yes)
+            switch (Result)
             {
-                a = 0;
-                window.Content = new UserControl1();
-                window.Title = "BeamNamer";
-                window.Height = 385;
-                window.Width = 580;
+                case MessageBoxResult.Yes:
+                    a = 0;
+                    window.Content = new UserControl1();
+                    window.Title = "BeamNamer";
+                    window.Height = 385;
+                    window.Width = 580;
 
 
-                context.Patient.BeginModifications();
-                string Something = string.Join(",", BeamName);
-                System.Windows.Forms.MessageBox.Show(Something.Trim());
-                foreach (Beam beam in context.PlanSetup.Beams) if (beam.IsSetupField == true)
-                    {
-                        beam.Id = BeamName[a];
-                        //beam.ApplyParameters = ;
-                        a = a + 1;
-                    }
-                foreach (Beam beam in context.PlanSetup.Beams) if (beam.IsSetupField != true)
-                    {
-                        beam.Id = BeamName[a];
-                        a = a + 1;
-                    }
-
-            }
-            if (Result == MessageBoxResult.No)
-            {
-                window.Content = new UserControl1();
-                window.Title = "BeamNamer";
-                window.Height = 385;
-                window.Width = 580;
+                    context.Patient.BeginModifications();
+                    string Something = string.Join(",", BeamName);
+                    System.Windows.Forms.MessageBox.Show(Something.Trim());
+                    foreach (Beam beam in context.PlanSetup.Beams) if (beam.IsSetupField == true)
+                        {
+                            beam.Id = BeamName[a];
+                            //beam.ApplyParameters = ;
+                            a = a + 1;
+                        }
+                    foreach (Beam beam in context.PlanSetup.Beams) if (beam.IsSetupField != true)
+                        {
+                            beam.Id = BeamName[a];
+                            a = a + 1;
+                        }
+                    break;
+                case MessageBoxResult.No:
+                    window.Content = new UserControl1();
+                    window.Title = "BeamNamer";
+                    window.Height = 385;
+                    window.Width = 580;
+                    break;
+                default:
+                    System.Windows.Application.Current.Shutdown();
+                    break;
             }
         }
 
