@@ -23,10 +23,6 @@ namespace VMS.TPS
 {
     public class Script
     {
-        public object BeamParameters { get; private set; }
-        public VRect<double> JawPositions { get; set; }
-
-
         public Script()
         {
         }
@@ -40,21 +36,19 @@ namespace VMS.TPS
             double G_Last = new double();
             int dummy = new int(); dummy = 0;
             int a = new int(); a = 1;
-            JawPositions = new VRect<double>();
-
 
             List<String> TreatmentBeam = new List<String>();
             List<String> SetupBeam = new List<String>();
             List<String> BeamName = new List<String>();
             foreach (Beam beam in context.PlanSetup.Beams)
             {
-                if (beam.IsSetupField != true) TreatmentBeam.Add(beam.Id.Substring(0, beam.Id.Length));
-                if (beam.IsSetupField == true) SetupBeam.Add(beam.Id.Substring(0, beam.Id.Length));
+                if (beam.IsSetupField != true) TreatmentBeam.Add(GetBeamID(beam));
+                if (beam.IsSetupField == true) SetupBeam.Add(GetBeamID(beam));
             }
             var TxBeam = context.PlanSetup.Beams.Where(s => TreatmentBeam.Contains(GetBeamID(s))).ToList();
             var SBeam = context.PlanSetup.Beams.Where(s => SetupBeam.Contains(GetBeamID(s))).ToList();
 
-            if (SetupBeam.Count == 3)
+            //if (SetupBeam.Count == 3)
             {
                 var CBCT = SBeam.Where(o => o.ControlPoints.First().GantryAngle.Equals(0)).Last();
                 foreach (Beam beam in SBeam)
@@ -100,29 +94,29 @@ namespace VMS.TPS
                     msg = string.Format("Check Beam Names \n\n{0}", beamID);
                 }
             }
-            if (SetupBeam.Count != 3)
-            {
-                foreach (Beam beam in TxBeam)
-                {
-                    switch (beam.MLCPlanType.ToString())
-                    {
-                        case "Static":
-                            G_First = Convert.ToInt32((beam.ControlPoints.First().GantryAngle));
-                            beamID += "\n" + GetBeamID(beam) + "\t---->1-" + a + "G" + beam.ControlPoints.First().GantryAngle;
-                            BeamName.Add("1-" + a + "G" + G_First);
-                            break;
+            //if (SetupBeam.Count != 3)
+            //{
+            //    foreach (Beam beam in TxBeam)
+            //    {
+            //        switch (beam.MLCPlanType.ToString())
+            //        {
+            //            case "Static":
+            //                G_First = Convert.ToInt32((beam.ControlPoints.First().GantryAngle));
+            //                beamID += "\n" + GetBeamID(beam) + "\t---->1-" + a + "G" + beam.ControlPoints.First().GantryAngle;
+            //                BeamName.Add("1-" + a + "G" + G_First);
+            //                break;
 
-                        default:
-                            G_First = Convert.ToInt32((beam.ControlPoints.First().GantryAngle));
-                            G_Last = Convert.ToInt32((beam.ControlPoints.Last().GantryAngle));
-                            beamID += "\n" + GetBeamID(beam) + "\t---->1-" + a + "G" + G_First + "-G" + G_Last;
-                            BeamName.Add("1-" + a + "G" + G_First + "-G" + G_Last);
-                            break;
-                    }
-                    a = a + 1;
-                }
-                msg = string.Format("Check Beam Names \n\nSetupG0\t---->New\nSetupG90\t---->New\nCBCT\t---->New{0}", beamID);
-            }
+            //            default:
+            //                G_First = Convert.ToInt32((beam.ControlPoints.First().GantryAngle));
+            //                G_Last = Convert.ToInt32((beam.ControlPoints.Last().GantryAngle));
+            //                beamID += "\n" + GetBeamID(beam) + "\t---->1-" + a + "G" + G_First + "-G" + G_Last;
+            //                BeamName.Add("1-" + a + "G" + G_First + "-G" + G_Last);
+            //                break;
+            //        }
+            //        a = a + 1;
+            //    }
+            //    msg = string.Format("Check Beam Names \n\nSetupG0\t---->New\nSetupG90\t---->New\nCBCT\t---->New{0}", beamID);
+            //}
             MessageBoxResult Result = System.Windows.MessageBox.Show(msg, "NamerGenie", MessageBoxButton.YesNoCancel, (MessageBoxImage)System.Windows.Forms.MessageBoxIcon.Information);
             switch (Result)
             {
@@ -133,21 +127,22 @@ namespace VMS.TPS
                     window.Height = 385;
                     window.Width = 580;
 
-
                     context.Patient.BeginModifications();
                     string Something = string.Join(",", BeamName);
                     System.Windows.Forms.MessageBox.Show(Something.Trim());
-                    foreach (Beam beam in context.PlanSetup.Beams) if (beam.IsSetupField == true)
-                        {
-                            beam.Id = BeamName[a];
-                            //beam.ApplyParameters = ;
-                            a = a + 1;
-                        }
-                    foreach (Beam beam in context.PlanSetup.Beams) if (beam.IsSetupField != true)
-                        {
-                            beam.Id = BeamName[a];
-                            a = a + 1;
-                        }
+                    foreach (Beam beam in context.PlanSetup.Beams.Where(b => b.IsSetupField))
+                    {
+                        beam.Id = BeamName[a];
+                        //BeamParameters beamParameters = beam.GetEditableParameters();
+                        //beamParameters.SetJawPositions(new VRect<double>(20, 20, 20, 20));
+                        //beam.ApplyParameters(beamParameters);//Add setupfield until_v16
+                        a = a + 1;
+                    }
+                    foreach (Beam beam in context.PlanSetup.Beams.Where(b => !b.IsSetupField))
+                    {
+                        beam.Id = BeamName[a];
+                        a = a + 1;
+                    }
                     break;
                 case MessageBoxResult.No:
                     window.Content = new UserControl1();

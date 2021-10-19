@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,7 +14,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using VMS.TPS.Common.Model.Types;
+using VMS.TPS.Common.Model.API;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace BeamName
 {
@@ -21,7 +25,6 @@ namespace BeamName
     /// </summary>
     public partial class UserControl1 : UserControl
     {
-        public VRect<double> JawPositions { get; set; }
         public UserControl1()
         {
             InitializeComponent();

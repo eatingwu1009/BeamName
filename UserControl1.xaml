@@ -15,13 +15,14 @@
     <Grid Margin="0,0,-60,-80">
         <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Margin="10,10,0,0" Width="550" Height="305" VerticalAlignment="Top"/>
         <Label Content="Course Number" HorizontalAlignment="Left" Margin="30,30,0,0" VerticalAlignment="Top" Width="140" Background="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}"/>
-        <TextBox HorizontalAlignment="Left" Height="26" Margin="175,30,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="105"/>
+        <TextBox HorizontalAlignment="Left" Height="26" Margin="175,30,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="105" FontSize="16"/>
         <ListBox HorizontalAlignment="Left" Height="270" VerticalAlignment="Top" Width="230" Margin="302,30,-47,0"/>
         <RadioButton Content="Different Isocenter" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,75,0,0"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="120
                 " VerticalAlignment="Top" Width="250" Margin="30,95,0,0"/>
         <Button Content="Show Energy" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="205,230,0,0"/>
         <Button Content="Apply -->" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="205,265,0,0"/>
+        <Button Content="&lt;-- Back" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="125,265,0,0"/>
 
     </Grid>
 </UserControl>
