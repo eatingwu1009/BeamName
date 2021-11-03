@@ -56,10 +56,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BeamName.cs" />
+    <Compile Include="BeamViewModel.cs" />
+    <Compile Include="MarkerViewModel.cs" />
+    <Compile Include="Script.cs" />
     <Compile Include="UserControl1.xaml.cs">
       <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="UserControl1.xaml">

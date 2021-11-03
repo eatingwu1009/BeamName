@@ -15,8 +15,8 @@
     <Grid Margin="0,0,10,-30">
         <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Margin="0,10,0,0" Width="550" Height="360" VerticalAlignment="Top"/>
         <Label Content="Course Number" HorizontalAlignment="Left" Margin="261,35,0,0" VerticalAlignment="Top" Width="117" Background="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}" FontFamily="Comic Sans MS" FontSize="14"/>
-        <TextBox HorizontalAlignment="Left" Height="26" Margin="383,39,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="105" FontSize="14" FontFamily="Comic Sans MS"/>
-        <ListBox HorizontalAlignment="Left" Height="264" VerticalAlignment="Top" Width="230" Margin="20,35,0,0"/>
+        <TextBox Name="textbox" HorizontalAlignment="Left" Height="26" Margin="383,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" FontSize="14" FontFamily="Comic Sans MS" Text="{Binding CourseNumber}" />
+        <ListBox HorizontalAlignment="Left" Height="264" VerticalAlignment="Top" Width="230" Margin="20,35,0,0" ItemsSource="{Binding BeamName}"/>
         <CheckBox Content="Different Isocenter" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="261,105,0,0" FontSize="13" FontFamily="Comic Sans MS"/>
         <Border BorderThickness="0" HorizontalAlignment="Left" Height="145" VerticalAlignment="Top" Width="227" Margin="261,127,0,0">
             <ListBox BorderThickness="0" ItemsSource="{Binding UIso}" Margin="0,25,0,0">
