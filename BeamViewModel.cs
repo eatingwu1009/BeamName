@@ -10,9 +10,18 @@ namespace BeamName
 {
     public class BeamViewModel : ViewModelBase
     {
-        public string BeamId { get; set; }
+        public string BeamId { get; }
         public string BeamName { get; set; }
-        public string ProperBeamName { get; set; }
+        private string _properBeamName;
+        public string ProperBeamName
+        {
+            get => _properBeamName;
+            set
+            {
+                _properBeamName = value;
+                RaisePropertyChanged();
+            }
+        }
         public double IsocenterX { get; }
         public double IsocenterY { get; }
         public double IsocenterZ { get; }
@@ -24,13 +33,35 @@ namespace BeamName
         public int CourseNumber { get; set; }
         public int BeamNumber { get; set; }
         public string EnergyModeDisplayName { get; }
-        public bool UserEnergyModeInName { get; set; }
+        private bool _useEnergyModeInName;
+        public bool UseEnergyModeInName
+        {
+            get => _useEnergyModeInName;
+            set
+            {
+                _useEnergyModeInName = value;
+                RaisePropertyChanged();
+            }
+        }
         public double JawPositionX1 { get; set; }
         public double JawPositionX2 { get; set; }
         public double JawPositionY1 { get; set; }
         public double JawPositionY2 { get; set; }
 
         private Beam _beam { get; }
+
+        public BeamViewModel(string beamName, double gantryAngle, int beamNumber, double lastGantryAngle, string energyMode, bool isSetupBeam, string mlcPlanType)
+        {
+            BeamId = beamName;
+            BeamName = beamName;
+            GantryAngle = gantryAngle;
+            BeamNumber = beamNumber;
+            LastGantryAngle = lastGantryAngle;
+            EnergyModeDisplayName = energyMode;
+            IsSetupBeam = isSetupBeam;
+            MlcPlanType = mlcPlanType;
+            SetProperName();
+        }
 
         public BeamViewModel(Beam beam, int courseNumber, int beamNumber, bool isLastSetupBeam = false, bool useEnergyModeInName = false)
         {
@@ -49,7 +80,7 @@ namespace BeamName
             CourseNumber = courseNumber;
             BeamNumber = beamNumber;
             EnergyModeDisplayName = beam.EnergyModeDisplayName;
-            UserEnergyModeInName = useEnergyModeInName;
+            UseEnergyModeInName = useEnergyModeInName;
 
             VRect<double> jawPositions = beam.ControlPoints.First().JawPositions;
             JawPositionX1 = jawPositions.X1;
@@ -69,7 +100,7 @@ namespace BeamName
             }
             else
             {
-                switch (_beam.MLCPlanType.ToString())
+                switch (MlcPlanType)
                 {
                     case "Static":
                         ProperBeamName = CourseNumber.ToString() + "-" + BeamNumber.ToString() + "G" + GantryAngle.ToString("0");
@@ -80,7 +111,7 @@ namespace BeamName
                         break;
                 }
 
-                if (UserEnergyModeInName) ProperBeamName += "_" + EnergyModeDisplayName;
+                if (UseEnergyModeInName) ProperBeamName += "_" + EnergyModeDisplayName;
             }
         }
 

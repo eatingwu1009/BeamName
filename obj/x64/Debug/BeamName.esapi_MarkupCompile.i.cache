@@ -1,7 +1,7 @@
 ﻿BeamName.esapi
 
 
-library
+winexe
 C#
 .cs
 C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\
@@ -12,9 +12,9 @@ DEBUG;TRACE
 
 1-98425716
 
-6-1033188727
+9-89165020
 15-759432535
 UserControl1.xaml;
 
-False
+True
 

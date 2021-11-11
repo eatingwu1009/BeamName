@@ -1,11 +1,12 @@
 C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\UserControl1.g.cs
+C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.esapi_MarkupCompile.cache
 C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.esapi_MarkupCompile.lref
 C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\UserControl1.baml
 C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.esapi.g.resources
 C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.csproj.CoreCompileInputs.cache
-C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.esapi.dll
 C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.esapi.pdb
-C:\Users\aria\source\repos\Projects\BeamName.esapi.dll
 C:\Users\aria\source\repos\Projects\BeamName.esapi.pdb
+C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.esapi.exe
+C:\Users\aria\source\repos\Projects\BeamName.esapi.exe
 C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.csproj.AssemblyReference.cache

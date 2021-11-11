@@ -47,32 +47,45 @@ namespace BeamName
                 if (item.i == beams.Where(b => b.IsSetupField).Count()) isLastSetupField = true;
                 BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, isLastSetupField));
             }
-
             foreach (var item in beams.Where(b => !b.IsSetupField).Select((beam, i) => new { beam, i }))
             {
                 BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i));
             }
-
             foreach(Structure structure in structures.Where(s => s.DicomType == "MARKER"))
             {
-                MarkerViewModels.Add(new MarkerViewModel(structure, isocenters));
+                MarkerViewModels.Add(new MarkerViewModel(SC.Image, structure, isocenters));
             }
 
             InitializeComponent();
             DataContext = this;
         }
 
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        public UserControl1(TestContext testContext)
         {
-            //BeamParameters beamParameters = Beams.GetEditableParameters();
-            //beamParameters.SetJawPositions(new VRect<double>(20, 20, 20, 20));
-            //beam.ApplyParameters(beamParameters);//Add setupfield until_v16
+            CourseNumber = 1;
+            MarkerViewModels = new ObservableCollection<MarkerViewModel>();
+            BeamViewModels = new ObservableCollection<BeamViewModel>();
+            for(int i = 0; i < 2; i++)
+            {
+                MarkerViewModel m = new MarkerViewModel(new Vector(i, i, i), "Position Id = " + i.ToString());
+                m.PositionId = "Position " + i.ToString();
+                MarkerViewModels.Add(m);
+            }
+
+            BeamViewModel b1 = new BeamViewModel("Beam A", 1.3294, 1, 30.9242 , "aaaa", true, "AAAAA");
+            BeamViewModel b2 = new BeamViewModel("Beam B", 2.3492, 2, 34.343, "bbbbb", false, "STATIC");
+            BeamViewModel b3 = new BeamViewModel("Beam Eun-woo", 2.3492, 2, 34.343, "cc", false, "sdsds");
+            BeamViewModels.Add(b1);
+            BeamViewModels.Add(b2);
+            BeamViewModels.Add(b3);
+
+            InitializeComponent();
+            DataContext = this;
         }
 
         private void Button_Back(object sender, RoutedEventArgs e)
         {
-            //Window.GetWindow(this).Close();
-
+            Window.GetWindow(this).Close();
         }
 
         private void Button_Apply(object sender, RoutedEventArgs e)
@@ -94,14 +107,35 @@ namespace BeamName
             {
                 beam.RenameBeam();
             }
+            foreach (Beam beam in SC.ExternalPlanSetup.Beams.Where(b => b.IsSetupField))
+            {
+                BeamParameters beamParameters = beam.GetEditableParameters();
+                beamParameters.SetJawPositions(new VRect<double>(20, 20, 20, 20));
+                beam.ApplyParameters(beamParameters);
+            }
         }
 
         private void EngCheckBox_Checked(object sender, RoutedEventArgs e)
         {
+            CheckBox checkBox = (CheckBox)sender;
             foreach (BeamViewModel beam in BeamViewModels.Where(b => !b.IsSetupBeam))
             {
-                beam.UserEnergyModeInName = true;
-                beam.SetProperName();
+                beam.UseEnergyModeInName = checkBox.IsChecked.Value;
+            }
+        }
+
+        private void Number_Checked(object sender, RoutedEventArgs e)
+        {
+            foreach (BeamViewModel beam in BeamViewModels.Where(b => !b.IsSetupBeam))
+            {
+                beam.CourseNumber = CourseNumber;
+            }
+        }
+        private void Number_unChecked(object sender, RoutedEventArgs e)
+        {
+            foreach (BeamViewModel beam in BeamViewModels.Where(b => !b.IsSetupBeam))
+            {
+                beam.CourseNumber = 1;
             }
         }
     }

@@ -26,13 +26,26 @@ namespace VMS.TPS
         public Script()
         {
         }
+
+        [STAThread]
+        public static void Main()
+        {
+            TestContext testContext = new TestContext();
+
+            Window window = new Window();
+            window.Content = new UserControl1(testContext);
+
+            System.Windows.Application app = new System.Windows.Application();
+            app.Run(window);
+        }
+
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void Execute(ScriptContext context, System.Windows.Window window, ScriptEnvironment environment)
         {
             window.Content = new UserControl1(context);
             window.Title = "BeamNamer";
             window.Height = 400;
-            window.Width = 530;
+            window.Width = 560;
             //msg = string.Format("Your beams will be Renamed\n\n{0}", beamID + "\n\nIf names are correct please confirm YES🙂.\nIf decide to modify please choose NO🙁‍");
             //if (SetupBeam.Count != 3)
             //{

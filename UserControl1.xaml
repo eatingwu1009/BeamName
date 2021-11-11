@@ -10,32 +10,47 @@
 	         HorizontalContentAlignment="Stretch"
 	         VerticalContentAlignment="Stretch"
              Height="365"
-             Width="570">
+             Width="595">
+
+    <UserControl.Resources>
+        <local:VectorConverter x:Key="VectorConverter" Precision="2"/>
+    </UserControl.Resources>
 
     <Grid Margin="0,0,10,-30">
-        <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Margin="0,10,0,0" Width="550" Height="360" VerticalAlignment="Top"/>
-        <Label Content="Course Number" HorizontalAlignment="Left" Margin="261,35,0,0" VerticalAlignment="Top" Width="117" Background="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}" FontFamily="Comic Sans MS" FontSize="14"/>
-        <TextBox Name="textbox" HorizontalAlignment="Left" Height="26" Margin="383,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" FontSize="14" FontFamily="Comic Sans MS" Text="{Binding CourseNumber}" />
-        <ListBox HorizontalAlignment="Left" Height="264" VerticalAlignment="Top" Width="230" Margin="20,35,0,0" ItemsSource="{Binding BeamName}"/>
-        <CheckBox Content="Different Isocenter" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="261,105,0,0" FontSize="13" FontFamily="Comic Sans MS"/>
-        <Border BorderThickness="0" HorizontalAlignment="Left" Height="145" VerticalAlignment="Top" Width="227" Margin="261,127,0,0">
-            <ListBox BorderThickness="0" ItemsSource="{Binding UIso}" Margin="0,25,0,0">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Label MinWidth="115" Height="24" Content="{Binding Position}" FontFamily="Comic Sans MS" />
-                            <TextBox MinWidth="100" Height="24" TextWrapping="Wrap" Text="{Binding PositionID}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+        <Rectangle Fill="#FFF4F4F5" Margin="0,10,0,0" Height="360" VerticalAlignment="Top"/>
+        <Label Content="Modify BeamName Here" HorizontalAlignment="Left" Margin="261,35,0,0" VerticalAlignment="Top" Width="284" Background="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}" FontFamily="Comic Sans MS" FontSize="14"/>
+        <TextBox x:Name="textbox" HorizontalAlignment="Left" Height="26" Margin="387,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="58" FontSize="13" Text="{Binding CourseNumber}" />
+        <Rectangle HorizontalAlignment="Left" Height="151" Margin="261,138,0,0" Stroke="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}" StrokeThickness="2" VerticalAlignment="Top" Width="286"/>
+        <Rectangle Fill="#FFF4F4F5"  HorizontalAlignment="Left" Height="32" Margin="257,124,0,0"  StrokeThickness="0" VerticalAlignment="Top" Width="148"/>
+        <CheckBox Content="Different Isocenter"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="261,130,0,0" FontSize="13" />
+        <Border BorderThickness="0" HorizontalAlignment="Left" Height="145" VerticalAlignment="Top" Width="284" Margin="263,144,0,0">
+            <Border BorderThickness="0" HorizontalAlignment="Left" Height="145" VerticalAlignment="Top" Width="280">
+                <ListBox BorderThickness="0" ItemsSource="{Binding MarkerViewModels}" Margin="0,24,0,10" Background="#FFF4F4F5">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Label MinWidth="160" Height="24" Content="{Binding Position, Converter={StaticResource VectorConverter}}" />
+                                <TextBox MinWidth="100" Height="24" TextWrapping="Wrap" Text="{Binding PositionId}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
         </Border>
-        <Button Content="⯬ Apply" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="261,277,0,0" FontSize="14"  FontFamily="Comic Sans MS" Click="Button_Apply" />
-        <Button Content="Back ⯮" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="341,277,0,0" FontSize="14"  FontFamily="Comic Sans MS" Click="Button_Back"/>
-        <CheckBox Content="Show Energy" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="261,83,0,0" FontSize="13" FontFamily="Comic Sans MS"/>
-        <Label Content="Position" HorizontalAlignment="Left" Height="35" Margin="261,127,0,0" VerticalAlignment="Top" Width="110" FontFamily="Comic Sans MS"/>
-        <Label Content="BeamName" HorizontalAlignment="Left" Height="35" Margin="389,127,0,0" VerticalAlignment="Top" Width="117" FontFamily="Comic Sans MS"/>
-        <Button Content="ReName✔️" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="175,304,0,0" FontSize="14"  FontFamily="Comic Sans MS" Click="Button_ReName" />
+        <Button Content="⯬ Apply" Background="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="261,296,0,0" FontSize="14"  FontFamily="Comic Sans MS" Click="Button_Apply" />
+        <Button Content="Back ⯮" Background="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="341,296,0,0" FontSize="14"  FontFamily="Comic Sans MS" Click="Button_Back"/>
+        <CheckBox Content="Show Energy" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="261,102,0,0" FontSize="13"  Checked="EngCheckBox_Checked" Unchecked="EngCheckBox_Checked"/>
+        <Label Content="Position" HorizontalAlignment="Left" Height="35" Margin="313,144,0,0" VerticalAlignment="Top" Width="110" />
+        <Label Content="BeamName" HorizontalAlignment="Left" Height="35" Margin="428,144,0,0" VerticalAlignment="Top" Width="117" />
+        <Button Content="ReName✔️" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="175,325,0,0" FontSize="14"  FontFamily="Comic Sans MS" Click="Button_ReName" />
+        <CheckBox Content="Course Number :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="261,75,0,0" FontSize="13" Checked="Number_Checked" Unchecked="Number_unChecked"/>
+        <ListBox HorizontalAlignment="Left"  Height="285" VerticalAlignment="Top" Width="230" Margin="20,35,0,0" ItemsSource="{Binding BeamViewModels}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding ProperBeamName}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
     </Grid>
 </UserControl>
