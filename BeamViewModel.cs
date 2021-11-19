@@ -102,6 +102,8 @@ namespace BeamName
 
         public void SetProperName()
         {
+            int i = 1;
+            int j = 1;
             if (IsSetupBeam)
             {
                 if (!IsLastSetupBeam) ProperBeamName = "SetupG" + GantryAngle.ToString("0");
@@ -114,6 +116,18 @@ namespace BeamName
                     case "STATIC":
                     case "SRS STATIC":
                         ProperBeamName = CourseNumber.ToString() + "-" + (BeamNumber + 1).ToString() + "G" + GantryAngle.ToString("0");
+                        break;
+                    case "TOTAL":
+                        if(GantryAngle == 90)
+                        {
+                            ProperBeamName = "LL-" + i.ToString();
+                            i++;
+                        }
+                        else 
+                        {
+                            ProperBeamName = "RL-" + j.ToString();
+                            j++;
+                        }
                         break;
 
                     default:

@@ -64,7 +64,7 @@ namespace BeamName
             MarkerViewModels.Add(new MarkerViewModel(new Vector (0,0,0), "UserOrigin" , ""));
             foreach (VVector isocenter in isocenters)
             {
-                    //MarkerViewModels.Add(new MarkerViewModel(SC.Image, structures, isocenter));
+                MarkerViewModels.Add(new MarkerViewModel(new Vector(isocenter), isocenter.ToString(), isocenter.ToString()));
             }
 
             InitializeComponent();

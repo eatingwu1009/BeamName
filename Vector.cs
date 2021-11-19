@@ -1,4 +1,6 @@
-﻿namespace BeamName
+﻿using VMS.TPS.Common.Model.Types;
+
+namespace BeamName
 {
     public class Vector : ViewModelBase
     {
@@ -39,6 +41,13 @@
             X = x;
             Y = y;
             Z = z;
+        }
+
+        public Vector(VVector v)
+        {
+            X = v.x;
+            Y = v.y;
+            Z = v.z;
         }
     }
 }
