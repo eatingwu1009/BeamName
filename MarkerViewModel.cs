@@ -10,6 +10,7 @@ namespace BeamName
 {
     public class MarkerViewModel : ViewModelBase
     {
+        private string PositionName;
         private string _positionId;
         public string PositionId
         {
@@ -33,32 +34,34 @@ namespace BeamName
 
         private Image _image { get; }
         private Structure _structure { get; }
+        private StructureSet structures { get; }
         private Vector SIU { get; }
-        private VVector PlanIso { get; }
 
-        public MarkerViewModel(Vector position, string positionId)
+        public MarkerViewModel(Vector position, string positionId, string positionName)
         {
             Position = position;
             PositionId = positionId;
+            PositionName = positionName;
         }
 
-        public MarkerViewModel(Image image, Structure structure, IEnumerable<VVector> isocenters)
+        public MarkerViewModel(Image image, StructureSet structures, VVector isocenter)
         {
-            _structure = structure;
             _image = image;
             SIU = new Vector(image.UserOrigin.x, image.UserOrigin.y, image.UserOrigin.z);
 
-            foreach (VVector isocenter in isocenters)
+            foreach (Structure structure in structures.Structures)
             {
-                Position = new Vector(Math.Round((isocenter.x - SIU.X) / 10, 2), Math.Round((isocenter.y - SIU.Y) / 10, 2), Math.Round((isocenter.z - SIU.Z) / 10, 2));
+                Position = new Vector(Math.Round((structure.CenterPoint.x - SIU.X) / 10, 2), Math.Round((structure.CenterPoint.y - SIU.Y) / 10, 2), Math.Round((structure.CenterPoint.z - SIU.Z) / 10, 2));
                 if (isocenter.Equals(SIU))
                 {
                     PositionId = "UserOrigin";
+                    PositionName = "";
                     break;
                 }
                 else if (isocenter.Equals(structure.CenterPoint))
                 {
                     PositionId = structure.Id;
+                    PositionName = structure.Id;
                     break;
                 }
             }

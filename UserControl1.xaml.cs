@@ -35,7 +35,7 @@ namespace BeamName
         {
             SC = scriptContext;
             IEnumerable<Beam> beams = SC.PlanSetup.Beams;
-            IEnumerable<Structure> structures = SC.StructureSet.Structures;
+            IEnumerable<Structure> structures = SC.StructureSet.Structures.Where(s => s.DicomType == "MARKER");
             IEnumerable<VVector> isocenters = beams.Select(b => b.IsocenterPosition).Distinct();
             BeamViewModels = new ObservableCollection<BeamViewModel>();
             MarkerViewModels = new ObservableCollection<MarkerViewModel>();
@@ -51,9 +51,10 @@ namespace BeamName
             {
                 BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i));
             }
-            foreach(Structure structure in structures.Where(s => s.DicomType == "MARKER"))
+            MarkerViewModels.Add(new MarkerViewModel(new Vector (0,0,0), "UserOrigin" , ""));
+            foreach (VVector isocenter in isocenters)
             {
-                MarkerViewModels.Add(new MarkerViewModel(SC.Image, structure, isocenters));
+                    //MarkerViewModels.Add(new MarkerViewModel(SC.Image, structures, isocenter));
             }
 
             InitializeComponent();
@@ -67,7 +68,7 @@ namespace BeamName
             BeamViewModels = new ObservableCollection<BeamViewModel>();
             for(int i = 0; i < 2; i++)
             {
-                MarkerViewModel m = new MarkerViewModel(new Vector(i, i, i), "Position Id = " + i.ToString());
+                MarkerViewModel m = new MarkerViewModel(new Vector(i, i, i), "Position Id = " + i.ToString(), "Position name = " + i.ToString());
                 m.PositionId = "Position " + i.ToString();
                 MarkerViewModels.Add(m);
             }

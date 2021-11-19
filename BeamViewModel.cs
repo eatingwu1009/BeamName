@@ -28,7 +28,7 @@ namespace BeamName
         public bool IsSetupBeam { get; }
         public double GantryAngle { get; }
         public double LastGantryAngle { get; }
-        public string MlcPlanType { get; }
+        public string Technique { get; }
         public bool IsLastSetupBeam { get; }
         public int CourseNumber { get; set; }
         public int BeamNumber { get; set; }
@@ -50,7 +50,7 @@ namespace BeamName
 
         private Beam _beam { get; }
 
-        public BeamViewModel(string beamName, double gantryAngle, int beamNumber, double lastGantryAngle, string energyMode, bool isSetupBeam, string mlcPlanType)
+        public BeamViewModel(string beamName, double gantryAngle, int beamNumber, double lastGantryAngle, string energyMode, bool isSetupBeam, string technique)
         {
             BeamId = beamName;
             BeamName = beamName;
@@ -59,7 +59,7 @@ namespace BeamName
             LastGantryAngle = lastGantryAngle;
             EnergyModeDisplayName = energyMode;
             IsSetupBeam = isSetupBeam;
-            MlcPlanType = mlcPlanType;
+            Technique = technique;
             SetProperName();
         }
 
@@ -75,7 +75,7 @@ namespace BeamName
             IsSetupBeam = beam.IsSetupField;
             GantryAngle = beam.ControlPoints.First().GantryAngle;
             LastGantryAngle = beam.ControlPoints.Last().GantryAngle;
-            MlcPlanType = beam.MLCPlanType.ToString();
+            Technique = beam.Technique.ToString();
             IsLastSetupBeam = isLastSetupBeam;
             CourseNumber = courseNumber;
             BeamNumber = beamNumber;
@@ -100,17 +100,17 @@ namespace BeamName
             }
             else
             {
-                switch (MlcPlanType)
+                switch (Technique)
                 {
-                    case "Static":
-                        ProperBeamName = CourseNumber.ToString() + "-" + BeamNumber.ToString() + "G" + GantryAngle.ToString("0");
+                    case "STATIC":
+                    case "SRS STATIC":
+                        ProperBeamName = CourseNumber.ToString() + "-" + (BeamNumber + 1).ToString() + "G" + GantryAngle.ToString("0");
                         break;
 
                     default:
-                        ProperBeamName = CourseNumber.ToString() + "-" + BeamNumber.ToString() + "G" + GantryAngle.ToString("0") + "-G" + LastGantryAngle.ToString("0");
+                        ProperBeamName = CourseNumber.ToString() + "-" + (BeamNumber + 1).ToString() + "G" + GantryAngle.ToString("0") + "-G" + LastGantryAngle.ToString("0");
                         break;
                 }
-
                 if (UseEnergyModeInName) ProperBeamName += "_" + EnergyModeDisplayName;
             }
         }
