@@ -30,7 +30,16 @@ namespace BeamName
         public double LastGantryAngle { get; }
         public string Technique { get; }
         public bool IsLastSetupBeam { get; }
-        public int CourseNumber { get; set; }
+        private int _courseNumber;
+        public int CourseNumber
+        {
+            get => _courseNumber;
+            set
+            {
+                _courseNumber = value;
+                RaisePropertyChanged();
+            }
+        }
         public int BeamNumber { get; set; }
         public string EnergyModeDisplayName { get; }
         private bool _useEnergyModeInName;

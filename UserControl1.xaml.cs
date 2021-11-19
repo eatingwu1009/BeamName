@@ -18,18 +18,28 @@ using VMS.TPS.Common.Model.API;
 using VMS.TPS.Common.Model.Types;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace BeamName
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl
+    public partial class UserControl1 : UserControl, INotifyPropertyChanged
     {
         public ObservableCollection<BeamViewModel> BeamViewModels { get; }
         public ObservableCollection<MarkerViewModel> MarkerViewModels { get; }
         public ScriptContext SC { get; }
-        public int CourseNumber { get; set; }
+        private int _courseNumber = 1;
+        public int CourseNumber
+        {
+            get => _courseNumber;
+            set
+            {
+                _courseNumber = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public UserControl1(ScriptContext scriptContext)
         {
@@ -44,7 +54,7 @@ namespace BeamName
             foreach (var item in beams.Where(b => b.IsSetupField).Select((beam, i) => new { beam, i }))
             {
                 bool isLastSetupField = false;
-                if (item.i == beams.Where(b => b.IsSetupField).Count()) isLastSetupField = true;
+                if (item.i == beams.Where(b => b.IsSetupField).Count() - 1) isLastSetupField = true;
                 BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, isLastSetupField));
             }
             foreach (var item in beams.Where(b => !b.IsSetupField).Select((beam, i) => new { beam, i }))
@@ -138,6 +148,13 @@ namespace BeamName
             {
                 beam.CourseNumber = 1;
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void RaisePropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }
