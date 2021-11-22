@@ -37,6 +37,7 @@ namespace BeamName
             set
             {
                 _courseNumber = value;
+                if(NumberCheckBox != null && NumberCheckBox.IsChecked.Value) UpdateBeamCourseNumbers(value);
                 RaisePropertyChanged();
             }
         }
@@ -137,17 +138,11 @@ namespace BeamName
 
         private void Number_Checked(object sender, RoutedEventArgs e)
         {
-            foreach (BeamViewModel beam in BeamViewModels.Where(b => !b.IsSetupBeam))
-            {
-                beam.CourseNumber = CourseNumber;
-            }
+            UpdateBeamCourseNumbers(CourseNumber);
         }
         private void Number_unChecked(object sender, RoutedEventArgs e)
         {
-            foreach (BeamViewModel beam in BeamViewModels.Where(b => !b.IsSetupBeam))
-            {
-                beam.CourseNumber = 1;
-            }
+            UpdateBeamCourseNumbers(1);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -155,6 +150,14 @@ namespace BeamName
         public void RaisePropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        private void UpdateBeamCourseNumbers(int courseNumber)
+        {
+            foreach(BeamViewModel beam in BeamViewModels) 
+            {
+                beam.CourseNumber = courseNumber;
+            }
         }
     }
 }

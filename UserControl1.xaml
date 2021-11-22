@@ -45,7 +45,7 @@
         <Label Content="Position" HorizontalAlignment="Left" Height="35" Margin="311,144,0,0" VerticalAlignment="Top" Width="53" />
         <Label Content="|  BeamName  |" HorizontalAlignment="Left" Height="35" Margin="419,144,0,0" VerticalAlignment="Top" Width="90" />
         <Button Content="ReName✔️" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="175,325,0,0" FontSize="14"  FontFamily="Comic Sans MS" Click="Button_ReName" />
-        <CheckBox Content="Course Number :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,75,0,0" FontSize="13" Checked="Number_Checked" Unchecked="Number_unChecked"/>
+        <CheckBox x:Name="NumberCheckBox" Content="Course Number :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,75,0,0" FontSize="13" Checked="Number_Checked" Unchecked="Number_unChecked"/>
         <ListBox HorizontalAlignment="Left"  Height="285" VerticalAlignment="Top" Width="230" Margin="20,35,0,0" ItemsSource="{Binding BeamViewModels}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -53,7 +53,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <CheckBox Content="NewCourse" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="514,150,0,0" Checked="Number_Checked" Unchecked="Number_unChecked"/>
+        <CheckBox Content="SeqBoost" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="514,150,0,0" Checked="Number_Checked" Unchecked="Number_unChecked"/>
 
     </Grid>
 </UserControl>
