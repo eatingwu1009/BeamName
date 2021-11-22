@@ -10,7 +10,6 @@ namespace BeamName
 {
     public class MarkerViewModel : ViewModelBase
     {
-        private string PositionName;
         private string _positionId;
         public string PositionId
         {
@@ -37,11 +36,10 @@ namespace BeamName
         private StructureSet structures { get; }
         private Vector SIU { get; }
 
-        public MarkerViewModel(Vector position, string positionId, string positionName)
+        public MarkerViewModel(Vector position, string positionId)
         {
             Position = position;
             PositionId = positionId;
-            PositionName = positionName;
         }
 
         public MarkerViewModel(Image image, StructureSet structures, VVector isocenter)
@@ -55,13 +53,11 @@ namespace BeamName
                 if (isocenter.Equals(SIU))
                 {
                     PositionId = "UserOrigin";
-                    PositionName = "";
                     break;
                 }
                 else if (isocenter.Equals(structure.CenterPoint))
                 {
                     PositionId = structure.Id;
-                    PositionName = structure.Id;
                     break;
                 }
             }

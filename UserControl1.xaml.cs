@@ -30,6 +30,7 @@ namespace BeamName
         public ObservableCollection<BeamViewModel> BeamViewModels { get; }
         public ObservableCollection<MarkerViewModel> MarkerViewModels { get; }
         public ScriptContext SC { get; }
+        public string PosId { get; set; }
         private int _courseNumber = 1;
         public int CourseNumber
         {
@@ -60,12 +61,29 @@ namespace BeamName
             }
             foreach (var item in beams.Where(b => !b.IsSetupField).Select((beam, i) => new { beam, i }))
             {
+                //int TBInumber = beams.Where(b => b.Technique = "TOTAL").Count();
                 BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i));
             }
-            MarkerViewModels.Add(new MarkerViewModel(new Vector (0,0,0), "UserOrigin" , ""));
             foreach (VVector isocenter in isocenters)
             {
-                MarkerViewModels.Add(new MarkerViewModel(new Vector(isocenter), isocenter.ToString(), isocenter.ToString()));
+                if ( isocenter.Equals(SC.Image.UserOrigin))
+                {
+                    MarkerViewModels.Add(new MarkerViewModel(new Vector(isocenter), "UserOrigin"));
+                }
+                else
+                {
+                   Structure a = structures.Where(s => s.CenterPoint.Equals(isocenter)).FirstOrDefault();
+                   string PosId = null;
+                   if (a is null)
+                   {
+                       PosId = "";
+                   }
+                   else
+                   {
+                       PosId = a.Id;
+                   }
+                   MarkerViewModels.Add(new MarkerViewModel(new Vector(isocenter), PosId));
+                }   
             }
 
             InitializeComponent();
@@ -79,8 +97,8 @@ namespace BeamName
             BeamViewModels = new ObservableCollection<BeamViewModel>();
             for(int i = 0; i < 2; i++)
             {
-                MarkerViewModel m = new MarkerViewModel(new Vector(i, i, i), "Position Id = " + i.ToString(), "Position name = " + i.ToString());
-                m.PositionId = "Position " + i.ToString();
+                MarkerViewModel m = new MarkerViewModel(new Vector(i, i, i), "Position Id = " + i.ToString());
+                m.PositionId = "Position" + i.ToString();
                 MarkerViewModels.Add(m);
             }
 
@@ -158,6 +176,11 @@ namespace BeamName
             {
                 beam.CourseNumber = courseNumber;
             }
+        }
+
+        private void SameIso_Checked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

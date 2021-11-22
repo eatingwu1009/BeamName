@@ -44,7 +44,7 @@ namespace VMS.TPS
         {
             window.Content = new UserControl1(context);
             window.Title = "BeamNamer";
-            window.Height = 400;
+            window.Height = 455;
             window.Width = 650;
             //msg = string.Format("Your beams will be Renamed\n\n{0}", beamID + "\n\nIf names are correct please confirm YES🙂.\nIf decide to modify please choose NO🙁‍");
             //if (SetupBeam.Count != 3)
