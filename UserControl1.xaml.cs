@@ -95,7 +95,7 @@ namespace BeamName
             CourseNumber = 1;
             MarkerViewModels = new ObservableCollection<MarkerViewModel>();
             BeamViewModels = new ObservableCollection<BeamViewModel>();
-            for(int i = 0; i < 2; i++)
+            for(int i = 0; i < 5; i++)
             {
                 MarkerViewModel m = new MarkerViewModel(new Vector(i, i, i), "Position Id = " + i.ToString());
                 m.PositionId = "Position" + i.ToString();
