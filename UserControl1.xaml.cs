@@ -33,7 +33,7 @@ namespace BeamName
         public Vector SIU { get; }
         public Vector new_isocenter { get; }
         public string PosId { get; set; }
-        public int NewCourse;
+        public string NewCourse;
         private int _courseNumber = 1;
         public int CourseNumber
         {
@@ -56,6 +56,8 @@ namespace BeamName
             BeamViewModels = new ObservableCollection<BeamViewModel>();
             MarkerViewModels = new ObservableCollection<MarkerViewModel>();
             CourseNumber = 1;
+            NewCourse = null;
+
 
             foreach (var item in beams.Where(b => b.IsSetupField).Select((beam, i) => new { beam, i }))
             {
@@ -75,7 +77,7 @@ namespace BeamName
                 if (isocenter.Equals(SIU))
                 {
                     new_isocenter = new Vector(Math.Round((isocenter.x - SIU.X) / 10, 2), Math.Round((isocenter.y - SIU.Y) / 10, 2), Math.Round((isocenter.z - SIU.Z) / 10, 2));
-                    MarkerViewModels.Add(new MarkerViewModel(new_isocenter, "UserOrigin", NewCourse));
+                    MarkerViewModels.Add(new MarkerViewModel(new_isocenter, "UserOrigin", NewCourse.ToString()));
                 }
                 else
                 {
@@ -104,7 +106,7 @@ namespace BeamName
             BeamViewModels = new ObservableCollection<BeamViewModel>();
             for(int i = 0; i < 5; i++)
             {
-                MarkerViewModel m = new MarkerViewModel(new Vector(i, i, i), "Position Id = " + i.ToString(), 1);
+                MarkerViewModel m = new MarkerViewModel(new Vector(i, i, i), "Position Id = " + i.ToString(), "");
                 m.PositionId = "Position" + i.ToString();
                 MarkerViewModels.Add(m);
             }
@@ -196,7 +198,7 @@ namespace BeamName
             int i = 1;
             foreach (MarkerViewModel marker in MarkerViewModels)
             {
-                marker.NewCourse = CourseNumber + i;
+                marker.NewCourse = (CourseNumber + i).ToString();
                 i++;
             }
         }
