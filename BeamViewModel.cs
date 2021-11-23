@@ -68,7 +68,7 @@ namespace BeamName
             LastGantryAngle = lastGantryAngle;
             EnergyModeDisplayName = energyMode;
             IsSetupBeam = isSetupBeam;
-            Technique = technique;
+            Technique = technique; 
             SetProperName();
         }
 

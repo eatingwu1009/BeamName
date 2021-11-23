@@ -30,7 +30,10 @@ namespace BeamName
         public ObservableCollection<BeamViewModel> BeamViewModels { get; }
         public ObservableCollection<MarkerViewModel> MarkerViewModels { get; }
         public ScriptContext SC { get; }
+        public Vector SIU { get; }
+        public Vector new_isocenter { get; }
         public string PosId { get; set; }
+        public int NewCourse;
         private int _courseNumber = 1;
         public int CourseNumber
         {
@@ -46,6 +49,7 @@ namespace BeamName
         public UserControl1(ScriptContext scriptContext)
         {
             SC = scriptContext;
+            SIU = new Vector(SC.Image.UserOrigin.x, SC.Image.UserOrigin.y, SC.Image.UserOrigin.z);
             IEnumerable<Beam> beams = SC.PlanSetup.Beams;
             IEnumerable<Structure> structures = SC.StructureSet.Structures.Where(s => s.DicomType == "MARKER");
             IEnumerable<VVector> isocenters = beams.Select(b => b.IsocenterPosition).Distinct();
@@ -56,7 +60,9 @@ namespace BeamName
             foreach (var item in beams.Where(b => b.IsSetupField).Select((beam, i) => new { beam, i }))
             {
                 bool isLastSetupField = false;
-                if (item.i == beams.Where(b => b.IsSetupField).Count() - 1) isLastSetupField = true;
+                BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, isLastSetupField));
+                beams.Where(b => b.ControlPoints.First().GantryAngle.Equals(0)).LastOrDefault();
+                //if (item.i == beams.Where(b => b.IsSetupField).Count() - 1) isLastSetupField = true;
                 BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, isLastSetupField));
             }
             foreach (var item in beams.Where(b => !b.IsSetupField).Select((beam, i) => new { beam, i }))
@@ -66,9 +72,10 @@ namespace BeamName
             }
             foreach (VVector isocenter in isocenters)
             {
-                if ( isocenter.Equals(SC.Image.UserOrigin))
+                if (isocenter.Equals(SIU))
                 {
-                    MarkerViewModels.Add(new MarkerViewModel(new Vector(isocenter), "UserOrigin"));
+                    new_isocenter = new Vector(Math.Round((isocenter.x - SIU.X) / 10, 2), Math.Round((isocenter.y - SIU.Y) / 10, 2), Math.Round((isocenter.z - SIU.Z) / 10, 2));
+                    MarkerViewModels.Add(new MarkerViewModel(new_isocenter, "UserOrigin", NewCourse));
                 }
                 else
                 {
@@ -82,10 +89,10 @@ namespace BeamName
                    {
                        PosId = a.Id;
                    }
-                   MarkerViewModels.Add(new MarkerViewModel(new Vector(isocenter), PosId));
+                   new_isocenter = new Vector(Math.Round((isocenter.x - SIU.X) / 10, 2), Math.Round((isocenter.y - SIU.Y) / 10, 2), Math.Round((isocenter.z - SIU.Z) / 10, 2));
+                   MarkerViewModels.Add(new MarkerViewModel(new_isocenter, PosId, NewCourse));
                 }   
             }
-
             InitializeComponent();
             DataContext = this;
         }
@@ -97,7 +104,7 @@ namespace BeamName
             BeamViewModels = new ObservableCollection<BeamViewModel>();
             for(int i = 0; i < 5; i++)
             {
-                MarkerViewModel m = new MarkerViewModel(new Vector(i, i, i), "Position Id = " + i.ToString());
+                MarkerViewModel m = new MarkerViewModel(new Vector(i, i, i), "Position Id = " + i.ToString(), 1);
                 m.PositionId = "Position" + i.ToString();
                 MarkerViewModels.Add(m);
             }
@@ -181,6 +188,17 @@ namespace BeamName
         private void SameIso_Checked(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void DifIso_isChecked(object sender, RoutedEventArgs e)
+        {
+            UpdateBeamCourseNumbers(CourseNumber);
+            int i = 1;
+            foreach (MarkerViewModel marker in MarkerViewModels)
+            {
+                marker.NewCourse = CourseNumber + i;
+                i++;
+            }
         }
     }
 }

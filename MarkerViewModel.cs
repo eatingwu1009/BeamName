@@ -10,6 +10,16 @@ namespace BeamName
 {
     public class MarkerViewModel : ViewModelBase
     {
+        private int _newCourse;
+        public int NewCourse
+        {
+            get => _newCourse;
+            set
+            {
+                _newCourse = value;
+                RaisePropertyChanged();
+            }
+        }
         private string _positionId;
         public string PositionId
         {
@@ -36,10 +46,11 @@ namespace BeamName
         private StructureSet structures { get; }
         private Vector SIU { get; }
 
-        public MarkerViewModel(Vector position, string positionId)
+        public MarkerViewModel(Vector position, string positionId, int newCourse)
         {
             Position = position;
             PositionId = positionId;
+            NewCourse = newCourse;
         }
 
         public MarkerViewModel(Image image, StructureSet structures, VVector isocenter)
