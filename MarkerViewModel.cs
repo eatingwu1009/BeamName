@@ -52,26 +52,5 @@ namespace BeamName
             PositionId = positionId;
             NewCourse = newCourse;
         }
-
-        public MarkerViewModel(Image image, StructureSet structures, VVector isocenter)
-        {
-            _image = image;
-            SIU = new Vector(image.UserOrigin.x, image.UserOrigin.y, image.UserOrigin.z);
-
-            foreach (Structure structure in structures.Structures)
-            {
-                Position = new Vector(Math.Round((structure.CenterPoint.x - SIU.X) / 10, 2), Math.Round((structure.CenterPoint.y - SIU.Y) / 10, 2), Math.Round((structure.CenterPoint.z - SIU.Z) / 10, 2));
-                if (isocenter.Equals(SIU))
-                {
-                    PositionId = "UserOrigin";
-                    break;
-                }
-                else if (isocenter.Equals(structure.CenterPoint))
-                {
-                    PositionId = structure.Id;
-                    break;
-                }
-            }
-        }
     }
 }

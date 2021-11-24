@@ -54,7 +54,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Label Content="IsoNumber" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="524,144,0,0" />
-        <CheckBox Content="User Difined :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="272,312,0,0" FontSize="13"  Checked="SameIso_Checked" Unchecked="SameIso_Checked"/>
+        <CheckBox Content="User Defined :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="272,312,0,0" FontSize="13"  Checked="SameIso_Checked" Unchecked="SameIso_Checked"/>
         <TextBox x:Name="textbox_Copy" MaxLength="2" HorizontalAlignment="Left" Height="26" Margin="401,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="49" FontSize="13" Text="{Binding SameIsoName}" />
         <Label Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="374,307,0,0" />
         <Label Content="Location" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="455,307,0,0" />

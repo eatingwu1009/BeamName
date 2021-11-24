@@ -31,7 +31,6 @@ namespace BeamName
         public ObservableCollection<MarkerViewModel> MarkerViewModels { get; }
         public ScriptContext SC { get; }
         public Vector SIU { get; }
-        public Vector new_isocenter { get; }
         public string PosId { get; set; }
         public string NewCourse;
         private int _courseNumber = 1;
@@ -41,7 +40,7 @@ namespace BeamName
             set
             {
                 _courseNumber = value;
-                if(NumberCheckBox != null && NumberCheckBox.IsChecked.Value) UpdateBeamCourseNumbers(value);
+                if (NumberCheckBox != null && NumberCheckBox.IsChecked.Value) UpdateBeamCourseNumbers(value);
                 RaisePropertyChanged();
             }
         }
@@ -76,24 +75,24 @@ namespace BeamName
             {
                 if (isocenter.Equals(SIU))
                 {
-                    new_isocenter = new Vector(Math.Round((isocenter.x - SIU.X) / 10, 2), Math.Round((isocenter.y - SIU.Y) / 10, 2), Math.Round((isocenter.z - SIU.Z) / 10, 2));
-                    MarkerViewModels.Add(new MarkerViewModel(new_isocenter, "UserOrigin", NewCourse.ToString()));
+                    Vector newIsocenter = new Vector(Math.Round((isocenter.x - SIU.X) / 10, 2), Math.Round((isocenter.y - SIU.Y) / 10, 2), Math.Round((isocenter.z - SIU.Z) / 10, 2));
+                    MarkerViewModels.Add(new MarkerViewModel(newIsocenter, "UserOrigin", NewCourse.ToString()));
                 }
                 else
                 {
-                   Structure a = structures.Where(s => s.CenterPoint.Equals(isocenter)).FirstOrDefault();
-                   string PosId = null;
-                   if (a is null)
-                   {
-                       PosId = "";
-                   }
-                   else
-                   {
-                       PosId = a.Id;
-                   }
-                   new_isocenter = new Vector(Math.Round((isocenter.x - SIU.X) / 10, 2), Math.Round((isocenter.y - SIU.Y) / 10, 2), Math.Round((isocenter.z - SIU.Z) / 10, 2));
-                   MarkerViewModels.Add(new MarkerViewModel(new_isocenter, PosId, NewCourse));
-                }   
+                    Structure structure = structures.Where(s => s.CenterPoint.Equals(isocenter)).FirstOrDefault();
+                    string PosId = null;
+                    if (structure is null)
+                    {
+                        PosId = "";
+                    }
+                    else
+                    {
+                        PosId = structure.Id;
+                    }
+                    Vector newIsocenter = new Vector(Math.Round((isocenter.x - SIU.X) / 10, 2), Math.Round((isocenter.y - SIU.Y) / 10, 2), Math.Round((isocenter.z - SIU.Z) / 10, 2));
+                    MarkerViewModels.Add(new MarkerViewModel(newIsocenter, PosId, NewCourse));
+                }
             }
             InitializeComponent();
             DataContext = this;
@@ -104,14 +103,14 @@ namespace BeamName
             CourseNumber = 1;
             MarkerViewModels = new ObservableCollection<MarkerViewModel>();
             BeamViewModels = new ObservableCollection<BeamViewModel>();
-            for(int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
             {
                 MarkerViewModel m = new MarkerViewModel(new Vector(i, i, i), "Position Id = " + i.ToString(), "");
                 m.PositionId = "Position" + i.ToString();
                 MarkerViewModels.Add(m);
             }
 
-            BeamViewModel b1 = new BeamViewModel("Beam A", 1.3294, 1, 30.9242 , "aaaa", true, "AAAAA");
+            BeamViewModel b1 = new BeamViewModel("Beam A", 1.3294, 1, 30.9242, "aaaa", true, "AAAAA");
             BeamViewModel b2 = new BeamViewModel("Beam B", 2.3492, 2, 34.343, "bbbbb", false, "STATIC");
             BeamViewModel b3 = new BeamViewModel("Beam Eun-woo", 2.3492, 2, 34.343, "cc", false, "sdsds");
             BeamViewModels.Add(b1);
@@ -142,7 +141,7 @@ namespace BeamName
         {
             SC.Patient.BeginModifications();
             RefreshBeamName();
-            foreach(BeamViewModel beam in BeamViewModels)
+            foreach (BeamViewModel beam in BeamViewModels)
             {
                 beam.RenameBeam();
             }
@@ -181,7 +180,7 @@ namespace BeamName
 
         private void UpdateBeamCourseNumbers(int courseNumber)
         {
-            foreach(BeamViewModel beam in BeamViewModels) 
+            foreach (BeamViewModel beam in BeamViewModels)
             {
                 beam.CourseNumber = courseNumber;
             }

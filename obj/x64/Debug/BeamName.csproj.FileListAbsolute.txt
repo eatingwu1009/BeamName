@@ -9,3 +9,4 @@ C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.esapi.pdb
 C:\Users\aria\source\repos\Projects\BeamName.esapi.pdb
 C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.esapi.exe
 C:\Users\aria\source\repos\Projects\BeamName.esapi.exe
+C:\Users\aria\source\repos\Projects\BeamName\obj\x64\Debug\BeamName.csproj.AssemblyReference.cache
