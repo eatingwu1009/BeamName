@@ -29,7 +29,7 @@ namespace BeamName
         public double GantryAngle { get; }
         public double LastGantryAngle { get; }
         public string Technique { get; }
-        public bool IsLastSetupBeam { get; }
+        public bool IsCbctBeam { get; }
         private int _courseNumber;
         public int CourseNumber
         {
@@ -59,7 +59,7 @@ namespace BeamName
 
         private Beam _beam { get; }
 
-        public BeamViewModel(string beamName, double gantryAngle, int beamNumber, double lastGantryAngle, string energyMode, bool isSetupBeam, string technique)
+        public BeamViewModel(string beamName, double gantryAngle, int beamNumber, double lastGantryAngle, string energyMode, bool isSetupBeam, string technique, bool isCbctBeam = false)
         {
             BeamId = beamName;
             BeamName = beamName;
@@ -68,11 +68,12 @@ namespace BeamName
             LastGantryAngle = lastGantryAngle;
             EnergyModeDisplayName = energyMode;
             IsSetupBeam = isSetupBeam;
-            Technique = technique; 
+            Technique = technique;
+            IsCbctBeam = isCbctBeam;
             SetProperName();
         }
 
-        public BeamViewModel(Beam beam, int courseNumber, int beamNumber, bool isLastSetupBeam = false, bool useEnergyModeInName = false)
+        public BeamViewModel(Beam beam, int courseNumber, int beamNumber, bool isCbctBeam = false, bool useEnergyModeInName = false)
         {
             _beam = beam;
 
@@ -85,7 +86,7 @@ namespace BeamName
             GantryAngle = beam.ControlPoints.First().GantryAngle;
             LastGantryAngle = beam.ControlPoints.Last().GantryAngle;
             Technique = beam.Technique.ToString();
-            IsLastSetupBeam = isLastSetupBeam;
+            IsCbctBeam = isCbctBeam;
             CourseNumber = courseNumber;
             BeamNumber = beamNumber;
             EnergyModeDisplayName = beam.EnergyModeDisplayName;
@@ -100,11 +101,11 @@ namespace BeamName
             SetProperName();
         }
 
-        public void SetProperName()
+        public void SetProperName(int totalBeamNumber = 0)
         {
             if (IsSetupBeam)
             {
-                if (!IsLastSetupBeam) ProperBeamName = "SetupG" + GantryAngle.ToString("0");
+                if (!IsCbctBeam) ProperBeamName = "SetupG" + GantryAngle.ToString("0");
                 else ProperBeamName = "CBCT";
             }
             else
@@ -118,11 +119,11 @@ namespace BeamName
                     case "TOTAL":
                         if (GantryAngle == 90)
                         {
-                            ProperBeamName = "LL-"; //+ i.ToString(); 
+                            ProperBeamName = "LL-" + totalBeamNumber.ToString(); 
                         }
                         else 
                         {
-                            ProperBeamName = "RL-"; //+ i.ToString();
+                            ProperBeamName = "RL-"+ totalBeamNumber.ToString();
                         }
                         break;
 

@@ -60,16 +60,13 @@ namespace BeamName
 
             foreach (var item in beams.Where(b => b.IsSetupField).Select((beam, i) => new { beam, i }))
             {
-                bool isLastSetupField = false;
-                BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, isLastSetupField));
-                beams.Where(b => b.ControlPoints.First().GantryAngle.Equals(0)).LastOrDefault();
-                //if (item.i == beams.Where(b => b.IsSetupField).Count() - 1) isLastSetupField = true;
-                BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, isLastSetupField));
+                double gantryAngle = item.beam.ControlPoints.First().GantryAngle;
+                if (item.i == beams.Where(b => b.IsSetupField).Count() - 1 && gantryAngle == 0 )  BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, true)); 
+                else BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
             }
             foreach (var item in beams.Where(b => !b.IsSetupField).Select((beam, i) => new { beam, i }))
             {
-                //int TBInumber = beams.Where(b => b.Technique = "TOTAL").Count();
-                BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i));
+                BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
             }
             foreach (VVector isocenter in isocenters)
             {
@@ -94,6 +91,8 @@ namespace BeamName
                     MarkerViewModels.Add(new MarkerViewModel(newIsocenter, PosId, NewCourse));
                 }
             }
+
+            RefreshBeamName();
             InitializeComponent();
             DataContext = this;
         }
@@ -113,10 +112,19 @@ namespace BeamName
             BeamViewModel b1 = new BeamViewModel("Beam A", 1.3294, 1, 30.9242, "aaaa", true, "AAAAA");
             BeamViewModel b2 = new BeamViewModel("Beam B", 2.3492, 2, 34.343, "bbbbb", false, "STATIC");
             BeamViewModel b3 = new BeamViewModel("Beam Eun-woo", 2.3492, 2, 34.343, "cc", false, "sdsds");
+            BeamViewModel b4 = new BeamViewModel("Beam 90 #1", 90.0, 2, 34.343, "cc", false, "TOTAL");
+            BeamViewModel b5 = new BeamViewModel("Beam 90 #2", 90.0, 2, 34.343, "cc", false, "TOTAL");
+            BeamViewModel b6 = new BeamViewModel("Beam 270 #1", 270.0, 2, 34.343, "cc", false, "TOTAL");
+            BeamViewModel b999 = new BeamViewModel("Last Setup Beam", 0.0, 2, 34.343, "cc", true, "TOTAL");
             BeamViewModels.Add(b1);
             BeamViewModels.Add(b2);
             BeamViewModels.Add(b3);
+            BeamViewModels.Add(b4);
+            BeamViewModels.Add(b5);
+            BeamViewModels.Add(b6);
+            BeamViewModels.Add(b999);
 
+            RefreshBeamName();
             InitializeComponent();
             DataContext = this;
         }
@@ -132,9 +140,21 @@ namespace BeamName
         }
         private void RefreshBeamName()
         {
+            int lBeamIndex = 1;
+            int rBeamIndex = 1;
             foreach (BeamViewModel beam in BeamViewModels)
             {
-                beam.SetProperName();
+                if (beam.Technique == "TOTAL" && beam.GantryAngle == 90)
+                {
+                    beam.SetProperName(lBeamIndex);
+                    lBeamIndex += 1;
+                }
+                else if (beam.Technique == "TOTAL" && beam.GantryAngle == 270)
+                {
+                    beam.SetProperName(rBeamIndex);
+                    rBeamIndex += 1;
+                }
+                else  beam.SetProperName(); 
             }
         }
         private void Button_ReName(object sender, RoutedEventArgs e)
@@ -194,7 +214,7 @@ namespace BeamName
         private void DifIso_isChecked(object sender, RoutedEventArgs e)
         {
             UpdateBeamCourseNumbers(CourseNumber);
-            int i = 1;
+            int i = 0;
             foreach (MarkerViewModel marker in MarkerViewModels)
             {
                 marker.NewCourse = (CourseNumber + i).ToString();

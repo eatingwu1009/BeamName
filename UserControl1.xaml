@@ -29,7 +29,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Label Width="152" Height="24" Content="{Binding Position, Converter={StaticResource VectorConverter}}" />
+                                <Label Width="150" Height="24" Content="{Binding Position, Converter={StaticResource VectorConverter}}" />
                                 <TextBox Width="80" Height="24" TextWrapping="Wrap" Text="{Binding PositionId}" MaxLength="8" />
                                 <Label Width="35" Height="24"  />
                                 <TextBox Width="45" Height="24" TextWrapping="Wrap" Text="{Binding NewCourse}" MaxLength="2"/>
