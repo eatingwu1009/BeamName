@@ -50,51 +50,51 @@ namespace BeamName
             SC = scriptContext;
             SIU = new Vector(SC.Image.UserOrigin.x, SC.Image.UserOrigin.y, SC.Image.UserOrigin.z);
             IEnumerable<Beam> beams = SC.PlanSetup.Beams;
-            IEnumerable<Structure> structures = SC.StructureSet.Structures.Where(s => s.DicomType == "MARKER");
+            IEnumerable<Structure> markerStructures = SC.StructureSet.Structures.Where(s => s.DicomType == "MARKER");
             IEnumerable<VVector> isocenters = beams.Select(b => b.IsocenterPosition).Distinct();
             BeamViewModels = new ObservableCollection<BeamViewModel>();
             MarkerViewModels = new ObservableCollection<MarkerViewModel>();
             CourseNumber = 1;
-            NewCourse = null;
+            NewCourse = "";
 
 
             foreach (var item in beams.Where(b => b.IsSetupField).Select((beam, i) => new { beam, i }))
             {
                 double gantryAngle = item.beam.ControlPoints.First().GantryAngle;
-                if (item.i == beams.Where(b => b.IsSetupField).Count() - 1 && gantryAngle == 0 )  BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, true)); 
+                if (item.i == beams.Where(b => b.IsSetupField).Count() - 1 && gantryAngle == 0) BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, true));
                 else BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
             }
             foreach (var item in beams.Where(b => !b.IsSetupField).Select((beam, i) => new { beam, i }))
             {
                 BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
             }
-            foreach (VVector isocenter in isocenters)
+
+            Vector userOrigin = new Vector(0.0, 0.0, 0.0);
+            MarkerViewModels.Add(new MarkerViewModel(userOrigin, "UserOrigin", NewCourse.ToString()));
+
+            foreach (Structure structure in markerStructures)
             {
-                if (isocenter.Equals(SIU))
+                foreach (VVector isocenter in isocenters)
                 {
-                    Vector newIsocenter = new Vector(Math.Round((isocenter.x - SIU.X) / 10, 2), Math.Round((isocenter.y - SIU.Y) / 10, 2), Math.Round((isocenter.z - SIU.Z) / 10, 2));
-                    MarkerViewModels.Add(new MarkerViewModel(newIsocenter, "UserOrigin", NewCourse.ToString()));
-                }
-                else
-                {
-                    Structure structure = structures.Where(s => s.CenterPoint.Equals(isocenter)).FirstOrDefault();
-                    string PosId = null;
-                    if (structure is null)
+                    Vector centerPoint = new Vector(structure.CenterPoint);
+                    Vector iso = new Vector(isocenter);
+                    if (IsNear(centerPoint, iso))
                     {
-                        PosId = "";
+                        Vector translatedIsocenter = new Vector(Math.Round((isocenter.x - SIU.X) / 10, 2), Math.Round((isocenter.y - SIU.Y) / 10, 2), Math.Round((isocenter.z - SIU.Z) / 10, 2));
+                        MarkerViewModels.Add(new MarkerViewModel(translatedIsocenter, structure.Id, NewCourse));
                     }
-                    else
-                    {
-                        PosId = structure.Id;
-                    }
-                    Vector newIsocenter = new Vector(Math.Round((isocenter.x - SIU.X) / 10, 2), Math.Round((isocenter.y - SIU.Y) / 10, 2), Math.Round((isocenter.z - SIU.Z) / 10, 2));
-                    MarkerViewModels.Add(new MarkerViewModel(newIsocenter, PosId, NewCourse));
                 }
             }
 
             RefreshBeamName();
             InitializeComponent();
             DataContext = this;
+        }
+
+        public bool IsNear(Vector v1, Vector v2, double precision = 0.01)
+        {
+            if (v1.X - v2.X < precision & v1.Y - v2.Y < precision & v1.Z - v2.Z < precision) return true;
+            else return false;
         }
 
         public UserControl1(TestContext testContext)
@@ -109,13 +109,13 @@ namespace BeamName
                 MarkerViewModels.Add(m);
             }
 
-            BeamViewModel b1 = new BeamViewModel("Beam A", 1.3294, 1, 30.9242, "aaaa", true, "AAAAA");
-            BeamViewModel b2 = new BeamViewModel("Beam B", 2.3492, 2, 34.343, "bbbbb", false, "STATIC");
-            BeamViewModel b3 = new BeamViewModel("Beam Eun-woo", 2.3492, 2, 34.343, "cc", false, "sdsds");
-            BeamViewModel b4 = new BeamViewModel("Beam 90 #1", 90.0, 2, 34.343, "cc", false, "TOTAL");
-            BeamViewModel b5 = new BeamViewModel("Beam 90 #2", 90.0, 2, 34.343, "cc", false, "TOTAL");
-            BeamViewModel b6 = new BeamViewModel("Beam 270 #1", 270.0, 2, 34.343, "cc", false, "TOTAL");
-            BeamViewModel b999 = new BeamViewModel("Last Setup Beam", 0.0, 2, 34.343, "cc", true, "TOTAL");
+            BeamViewModel b1 = new BeamViewModel("Beam A", 1.3294, 1, 30.9242, "aaaa", true, "AAAAA", "", false);
+            BeamViewModel b2 = new BeamViewModel("Beam B", 2.3492, 2, 34.343, "bbbbb", false, "STATIC", "lung", false);
+            BeamViewModel b3 = new BeamViewModel("Beam Eun-woo", 2.3492, 2, 34.343, "cc", false, "sdsds", "lung", false);
+            BeamViewModel b4 = new BeamViewModel("Beam 90 #1", 90.0, 2, 34.343, "cc", false, "TOTAL", "lung", false);
+            BeamViewModel b5 = new BeamViewModel("Beam 90 #2", 90.0, 2, 34.343, "cc", false, "TOTAL", "lung", false);
+            BeamViewModel b6 = new BeamViewModel("Beam 270 #1", 270.0, 2, 34.343, "cc", false, "TOTAL", "lung", false);
+            BeamViewModel b999 = new BeamViewModel("Last Setup Beam", 0.0, 2, 34.343, "cc", true, "TOTAL", "lung", false);
             BeamViewModels.Add(b1);
             BeamViewModels.Add(b2);
             BeamViewModels.Add(b3);
@@ -154,7 +154,7 @@ namespace BeamName
                     beam.SetProperName(rBeamIndex);
                     rBeamIndex += 1;
                 }
-                else  beam.SetProperName(); 
+                else beam.SetProperName();
             }
         }
         private void Button_ReName(object sender, RoutedEventArgs e)
@@ -206,10 +206,6 @@ namespace BeamName
             }
         }
 
-        private void SameIso_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         private void DifIso_isChecked(object sender, RoutedEventArgs e)
         {
@@ -219,6 +215,15 @@ namespace BeamName
             {
                 marker.NewCourse = (CourseNumber + i).ToString();
                 i++;
+            }
+        }
+
+        private void UserDefine_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            foreach (BeamViewModel beam in BeamViewModels.Where(b => !b.IsSetupBeam))
+            {
+                beam.IsSelected = checkBox.IsChecked.Value;
             }
         }
     }

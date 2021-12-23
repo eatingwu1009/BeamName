@@ -25,7 +25,7 @@
         <CheckBox Content="Different Isocenter"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,130,0,0" FontSize="13" Checked="DifIso_isChecked"/>
         <Border BorderThickness="0" HorizontalAlignment="Left" Height="145" VerticalAlignment="Top" Width="325" Margin="272,150,0,0">
             <Border BorderThickness="0" Height="145" VerticalAlignment="Top" Margin="2,-2,-2,0">
-                <ItemsControl BorderThickness="0" ItemsSource="{Binding MarkerViewModels}" Margin="0,22,0,0" Background="#FFF4F4F5">
+                <ItemsControl BorderThickness="0" ItemsSource="{Binding MarkerViewModels}" Margin="0,22,0,0" Background="#FFF4F4F5" ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -42,23 +42,22 @@
         <Button Content="⯬ Apply" Background="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="270,343,0,0" FontSize="14"  FontFamily="Comic Sans MS" Click="Button_Apply" />
         <Button Content="Back ⯮" Background="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="350,343,0,0" FontSize="14"  FontFamily="Comic Sans MS" Click="Button_Back"/>
         <CheckBox Content="Show Energy" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,102,0,0" FontSize="13"  Checked="EngCheckBox_Checked" Unchecked="EngCheckBox_Checked"/>
-        <Label Content="Position" HorizontalAlignment="Left" Height="35" Margin="311,144,0,0" VerticalAlignment="Top" Width="53" />
+        <!--<Label Content="Position" HorizontalAlignment="Left" Height="35" Margin="311,144,0,0" VerticalAlignment="Top" Width="53" />
         <Label Content="|  BeamName  |" HorizontalAlignment="Left" Height="35" Margin="419,144,0,0" VerticalAlignment="Top" Width="90" />
+        <Label Content="IsoNumber" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="524,144,0,0" />-->
         <Button Content="ReName✔️" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="175,370,0,0" FontSize="14"  FontFamily="Comic Sans MS" Click="Button_ReName" />
         <CheckBox x:Name="NumberCheckBox" Content="Course Number :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,75,0,0" FontSize="13" Checked="Number_Checked" Unchecked="Number_unChecked"/>
-        <ListBox HorizontalAlignment="Left"  Height="330" VerticalAlignment="Top" Width="230" Margin="20,35,0,0" ItemsSource="{Binding BeamViewModels}" SelectionMode="Multiple" SelectedItem="{Binding Beam_Selected}">
+        <ListBox HorizontalAlignment="Left"  Height="330" VerticalAlignment="Top" Width="230" Margin="20,35,0,0" ItemsSource="{Binding BeamViewModels}" SelectionMode="Multiple" SelectedItem="{Binding BeamSelected}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding ProperBeamName}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Label Content="IsoNumber" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="524,144,0,0" />
-        <CheckBox Content="User Defined :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="272,312,0,0" FontSize="13"  Checked="SameIso_Checked" Unchecked="SameIso_Checked"/>
-        <TextBox x:Name="textbox_Copy" MaxLength="2" HorizontalAlignment="Left" Height="26" Margin="401,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="49" FontSize="13" Text="{Binding SameIsoName}" />
+        <CheckBox Content="User Defined :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="272,312,0,0" FontSize="13"  Checked="UserDefine_Checked" />
+        <TextBox x:Name="textbox_Copy" MaxLength="2" HorizontalAlignment="Left" Height="26" Margin="401,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="49" FontSize="13" Text="{Binding UserDefineID}" />
         <Label Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="374,307,0,0" />
         <Label Content="Location" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="455,307,0,0" />
-        <TextBox x:Name="textbox_Copy1" MaxLength="8" HorizontalAlignment="Left" Height="26" Margin="515,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" FontSize="13" Text="{Binding SameIsoName}" />
-
+        <TextBox x:Name="textbox_Copy1" MaxLength="8" HorizontalAlignment="Left" Height="26" Margin="515,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" FontSize="13" Text="{Binding UserDefineLocation}" />
     </Grid>
 </UserControl>

@@ -26,6 +26,7 @@ namespace BeamName
         public double IsocenterY { get; }
         public double IsocenterZ { get; }
         public bool IsSetupBeam { get; }
+        public bool IsSelected { get; set; }
         public double GantryAngle { get; }
         public double LastGantryAngle { get; }
         public string Technique { get; }
@@ -42,6 +43,7 @@ namespace BeamName
         }
         public int BeamNumber { get; set; }
         public string EnergyModeDisplayName { get; }
+        public string UserDefineLocation { get; }
         private bool _useEnergyModeInName;
         public bool UseEnergyModeInName
         {
@@ -59,7 +61,7 @@ namespace BeamName
 
         private Beam _beam { get; }
 
-        public BeamViewModel(string beamName, double gantryAngle, int beamNumber, double lastGantryAngle, string energyMode, bool isSetupBeam, string technique, bool isCbctBeam = false)
+        public BeamViewModel(string beamName, double gantryAngle, int beamNumber, double lastGantryAngle, string energyMode, bool isSetupBeam, string technique, string userDefineLocation, bool isCbctBeam = false)
         {
             BeamId = beamName;
             BeamName = beamName;
@@ -67,13 +69,14 @@ namespace BeamName
             BeamNumber = beamNumber;
             LastGantryAngle = lastGantryAngle;
             EnergyModeDisplayName = energyMode;
+            UserDefineLocation = userDefineLocation;
             IsSetupBeam = isSetupBeam;
             Technique = technique;
             IsCbctBeam = isCbctBeam;
             SetProperName();
         }
 
-        public BeamViewModel(Beam beam, int courseNumber, int beamNumber, bool isCbctBeam = false, bool useEnergyModeInName = false)
+        public BeamViewModel(Beam beam, int courseNumber, int beamNumber, bool isCbctBeam = false, bool useEnergyModeInName = false, bool isSelected = false)
         {
             _beam = beam;
 
@@ -91,6 +94,8 @@ namespace BeamName
             BeamNumber = beamNumber;
             EnergyModeDisplayName = beam.EnergyModeDisplayName;
             UseEnergyModeInName = useEnergyModeInName;
+            IsSelected = isSelected;
+
 
             VRect<double> jawPositions = beam.ControlPoints.First().JawPositions;
             JawPositionX1 = jawPositions.X1;
@@ -131,6 +136,7 @@ namespace BeamName
                         ProperBeamName = CourseNumber.ToString() + "-" + (BeamNumber + 1).ToString() + "G" + GantryAngle.ToString("0") + "-G" + LastGantryAngle.ToString("0");
                         break;
                 }
+                //if (IsSelected) ProperBeamName += "_" + UserDefineLocation;
                 if (UseEnergyModeInName) ProperBeamName += "_" + EnergyModeDisplayName;
             }
         }
