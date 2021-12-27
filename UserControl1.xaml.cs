@@ -70,15 +70,13 @@ namespace BeamName
             }
 
             Vector userOrigin = new Vector(0.0, 0.0, 0.0);
-            MarkerViewModels.Add(new MarkerViewModel(userOrigin, "UserOrigin", NewCourse.ToString()));
+            MarkerViewModels.Add(new MarkerViewModel(userOrigin, "", NewCourse.ToString()));
 
-            foreach (Structure structure in markerStructures)
+            foreach (VVector isocenter in isocenters)
             {
-                foreach (VVector isocenter in isocenters)
-                {
-                    Vector centerPoint = new Vector(structure.CenterPoint);
-                    Vector iso = new Vector(isocenter);
-                    if (IsNear(centerPoint, iso))
+                    foreach (Structure structure in markerStructures)
+                    {
+                    if (isocenter.Equals(structure.CenterPoint))
                     {
                         Vector translatedIsocenter = new Vector(Math.Round((isocenter.x - SIU.X) / 10, 2), Math.Round((isocenter.y - SIU.Y) / 10, 2), Math.Round((isocenter.z - SIU.Z) / 10, 2));
                         MarkerViewModels.Add(new MarkerViewModel(translatedIsocenter, structure.Id, NewCourse));
@@ -165,12 +163,13 @@ namespace BeamName
             {
                 beam.RenameBeam();
             }
-            foreach (Beam beam in SC.ExternalPlanSetup.Beams.Where(b => b.IsSetupField))
-            {
-                BeamParameters beamParameters = beam.GetEditableParameters();
-                beamParameters.SetJawPositions(new VRect<double>(20, 20, 20, 20));
-                beam.ApplyParameters(beamParameters);
-            }
+            //need upgrade
+            //foreach (Beam beam in SC.ExternalPlanSetup.Beams.Where(b => b.IsSetupField))
+            //{
+            //    BeamParameters beamParameters = beam.GetEditableParameters();
+            //    beamParameters.SetJawPositions(new VRect<double>(20, 20, 20, 20));
+            //    beam.ApplyParameters(beamParameters);
+            //}
         }
 
         private void EngCheckBox_Checked(object sender, RoutedEventArgs e)
