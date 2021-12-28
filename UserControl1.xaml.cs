@@ -229,7 +229,7 @@ namespace BeamName
             CheckBox checkBox = (CheckBox)sender;
             foreach (BeamViewModel beam in BeamViewModels.Where(b => !b.IsSetupBeam))
             {
-                beam.IsSelected = checkBox.IsChecked.Value;
+                beam.IsUserDefine = checkBox.IsChecked.Value;
             }
         }
     }

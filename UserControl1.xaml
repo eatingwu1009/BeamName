@@ -48,16 +48,30 @@
         <Button Content="ReName✔️" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="175,370,0,0" FontSize="14"  FontFamily="Comic Sans MS" Click="Button_ReName" />
         <CheckBox x:Name="NumberCheckBox" Content="Course Number :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,75,0,0" FontSize="13" Checked="Number_Checked" Unchecked="Number_unChecked"/>
         <ListBox HorizontalAlignment="Left"  Height="330" VerticalAlignment="Top" Width="230" Margin="20,35,0,0" ItemsSource="{Binding BeamViewModels}" SelectionMode="Multiple" SelectedItem="{Binding BeamSelected}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True" >
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="Background" Value="LightPink" />
+                            <Setter Property="Foreground" Value="DeepPink" />
+                        </Trigger>
+                    </Style.Triggers>
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                    </Style.Resources>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding ProperBeamName}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <CheckBox Content="User Defined :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="272,312,0,0" FontSize="13"  Checked="UserDefine_Checked" />
-        <TextBox x:Name="textbox_Copy" MaxLength="2" HorizontalAlignment="Left" Height="26" Margin="401,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="49" FontSize="13" Text="{Binding UserDefineID}" />
-        <Label Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="374,307,0,0" />
-        <Label Content="Location" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="455,307,0,0" />
-        <TextBox x:Name="textbox_Copy1" MaxLength="8" HorizontalAlignment="Left" Height="26" Margin="515,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" FontSize="13" Text="{Binding UserDefineLocation}" />
+        <CheckBox Content="User Defined :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="272,312,0,0" FontSize="13"  Checked="UserDefine_Checked" Foreground="DeepPink" BorderBrush="DeepPink" />
+        <TextBox x:Name="textbox_UserDefineID" MaxLength="2" HorizontalAlignment="Left" Height="26" Margin="401,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="49" FontSize="13" Text="{Binding UserDefineID}" BorderBrush="DeepPink" Foreground="DeepPink"/>
+        <Label Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="374,307,0,0" Foreground="DeepPink"/>
+        <Label Content="Location" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="455,307,0,0" Foreground="DeepPink"/>
+        <TextBox x:Name="textbox_UserDefineLocation" MaxLength="8" HorizontalAlignment="Left" Height="26" Margin="515,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" FontSize="13" Text="{Binding UserDefineLocation}" BorderBrush="DeepPink" Foreground="DeepPink"/>
     </Grid>
 </UserControl>

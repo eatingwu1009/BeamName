@@ -26,7 +26,7 @@ namespace BeamName
         public double IsocenterY { get; }
         public double IsocenterZ { get; }
         public bool IsSetupBeam { get; }
-        public bool IsSelected { get; set; }
+        public bool IsUserDefine { get; set; }
         public double GantryAngle { get; }
         public double LastGantryAngle { get; }
         public string Technique { get; }
@@ -43,7 +43,7 @@ namespace BeamName
         }
         public int BeamNumber { get; set; }
         public string EnergyModeDisplayName { get; }
-        public string UserDefineLocation { get; }
+        public string UserDefineLocation { get; set; }
         private bool _useEnergyModeInName;
         public bool UseEnergyModeInName
         {
@@ -76,7 +76,7 @@ namespace BeamName
             SetProperName();
         }
 
-        public BeamViewModel(Beam beam, int courseNumber, int beamNumber, bool isCbctBeam = false, bool useEnergyModeInName = false, bool isSelected = false)
+        public BeamViewModel(Beam beam, int courseNumber, int beamNumber, bool isCbctBeam = false, bool useEnergyModeInName = false, bool isUserDefine = false)
         {
             _beam = beam;
 
@@ -94,7 +94,7 @@ namespace BeamName
             BeamNumber = beamNumber;
             EnergyModeDisplayName = beam.EnergyModeDisplayName;
             UseEnergyModeInName = useEnergyModeInName;
-            IsSelected = isSelected;
+            IsUserDefine = isUserDefine;
 
 
             VRect<double> jawPositions = beam.ControlPoints.First().JawPositions;
@@ -136,8 +136,8 @@ namespace BeamName
                         ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0") + "-G" + LastGantryAngle.ToString("0");
                         break;
                 }
-                //if (IsSelected) ProperBeamName += "_" + UserDefineLocation;
                 if (UseEnergyModeInName) ProperBeamName += "_" + EnergyModeDisplayName;
+                if (IsUserDefine) ProperBeamName += "_" + UserDefineLocation;
             }
         }
 
