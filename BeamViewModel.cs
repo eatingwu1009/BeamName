@@ -137,7 +137,7 @@ namespace BeamName
                         break;
                 }
                 if (UseEnergyModeInName) ProperBeamName += "_" + EnergyModeDisplayName;
-                if (IsUserDefine) ProperBeamName += "_" + UserDefineLocation;
+                if (IsUserDefine) ProperBeamName += "_" + UserDefineLocation;//.ToString();
             }
         }
 
