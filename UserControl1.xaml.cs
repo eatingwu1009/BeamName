@@ -51,7 +51,7 @@ namespace BeamName
             SIU = new Vector(SC.Image.UserOrigin.x, SC.Image.UserOrigin.y, SC.Image.UserOrigin.z);
             IEnumerable<Beam> beams = SC.PlanSetup.Beams;
             IEnumerable<Structure> markerStructures = SC.StructureSet.Structures.Where(s => s.DicomType == "MARKER");
-            IEnumerable<VVector> isocenters = beams.Select(b => b.IsocenterPosition).Distinct();
+            IEnumerable<VVector> isocenters = beams.Where(b => !b.IsSetupField).Select(b => b.IsocenterPosition).Distinct();
             BeamViewModels = new ObservableCollection<BeamViewModel>();
             MarkerViewModels = new ObservableCollection<MarkerViewModel>();
             CourseNumber = 1;
@@ -72,13 +72,13 @@ namespace BeamName
             Vector userOrigin = new Vector(0.0, 0.0, 0.0);
             MarkerViewModels.Add(new MarkerViewModel(userOrigin, "", NewCourse.ToString()));
 
-            foreach (VVector isocenter in isocenters)
+            foreach (var iso in isocenters)
             {
-                    foreach (Structure structure in markerStructures)
+                foreach (Structure structure in markerStructures)
+                {
+                    if (IsNear(structure.CenterPoint, iso))
                     {
-                    if (isocenter.Equals(structure.CenterPoint))
-                    {
-                        Vector translatedIsocenter = new Vector(Math.Round((isocenter.x - SIU.X) / 10, 2), Math.Round((isocenter.y - SIU.Y) / 10, 2), Math.Round((isocenter.z - SIU.Z) / 10, 2));
+                        Vector translatedIsocenter = new Vector(Math.Round((structure.CenterPoint.x - SIU.X) / 10, 2), Math.Round((structure.CenterPoint.y - SIU.Y) / 10, 2), Math.Round((structure.CenterPoint.z - SIU.Z) / 10, 2));
                         MarkerViewModels.Add(new MarkerViewModel(translatedIsocenter, structure.Id, NewCourse));
                     }
                 }
@@ -89,9 +89,9 @@ namespace BeamName
             DataContext = this;
         }
 
-        public bool IsNear(Vector v1, Vector v2, double precision = 0.01)
+        public bool IsNear(VVector v1, VVector v2, double precision = 0.0001)
         {
-            if (v1.X - v2.X < precision & v1.Y - v2.Y < precision & v1.Z - v2.Z < precision) return true;
+            if (Math.Abs(v1.x - v2.x) < precision && Math.Abs(v1.y - v2.y) < precision && Math.Abs(v1.z - v2.z) < precision) return true;
             else return false;
         }
 
@@ -140,6 +140,7 @@ namespace BeamName
         {
             int lBeamIndex = 1;
             int rBeamIndex = 1;
+            int BeamIndex = 1;
             foreach (BeamViewModel beam in BeamViewModels)
             {
                 if (beam.Technique == "TOTAL" && beam.GantryAngle == 90)
@@ -152,7 +153,13 @@ namespace BeamName
                     beam.SetProperName(rBeamIndex);
                     rBeamIndex += 1;
                 }
+                else if (beam.IsSetupBeam is false)
+                {
+                    beam.SetProperName(BeamIndex);
+                    BeamIndex += 1;
+                }
                 else beam.SetProperName();
+
             }
         }
         private void Button_ReName(object sender, RoutedEventArgs e)

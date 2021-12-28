@@ -119,7 +119,7 @@ namespace BeamName
                 {
                     case "STATIC":
                     case "SRS STATIC":
-                        ProperBeamName = CourseNumber.ToString() + "-" + (BeamNumber + 1).ToString() + "G" + GantryAngle.ToString("0");
+                        ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0");
                         break;
                     case "TOTAL":
                         if (GantryAngle == 90)
@@ -133,7 +133,7 @@ namespace BeamName
                         break;
 
                     default:
-                        ProperBeamName = CourseNumber.ToString() + "-" + (BeamNumber + 1).ToString() + "G" + GantryAngle.ToString("0") + "-G" + LastGantryAngle.ToString("0");
+                        ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0") + "-G" + LastGantryAngle.ToString("0");
                         break;
                 }
                 //if (IsSelected) ProperBeamName += "_" + UserDefineLocation;
