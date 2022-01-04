@@ -47,9 +47,10 @@
         <Label Content="TxLocation" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="495,144,0,0" />
         <Button Content="ReName✔️" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="175,370,0,0" FontSize="14"  FontFamily="Comic Sans MS" Click="Button_ReName" />
         <CheckBox x:Name="NumberCheckBox" Content="Course Number :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,75,0,0" FontSize="13" Checked="Number_Checked" Unchecked="Number_unChecked"/>
-        <ListBox HorizontalAlignment="Left"  Height="330" VerticalAlignment="Top" Width="230" Margin="20,35,0,0" ItemsSource="{Binding BeamViewModels}" SelectionMode="Multiple" SelectedItem="{Binding BeamSelected}">
+        <ListBox x:Name="BeamsListBox" HorizontalAlignment="Left"  Height="330" VerticalAlignment="Top" Width="230" Margin="20,35,0,0" SelectionMode="Multiple" ItemsSource="{Binding BeamViewModels}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
+                    <!--<Setter Property="IsSelected" Value="{Binding IsUserDefine, Mode=TwoWay}" />-->
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True" >
                             <Setter Property="FontWeight" Value="Bold" />
@@ -68,10 +69,10 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <CheckBox Content="User Defined :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="272,312,0,0" FontSize="13"  Checked="UserDefine_Checked" Foreground="DeepPink" BorderBrush="DeepPink" />
-        <TextBox x:Name="textbox_UserDefineID" MaxLength="2" HorizontalAlignment="Left" Height="26" Margin="410,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="30" FontSize="13" Text="{Binding UserDefineID}" BorderBrush="DeepPink" Foreground="DeepPink"/>
+        <Label Content="👤 User Defined :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,306,0,0" FontSize="13" Foreground="DeepPink" BorderBrush="DeepPink" Width="111"/>
+        <TextBox x:Name="textbox_UserDefineID" MaxLength="2" HorizontalAlignment="Left" Height="26" Margin="410,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="30" FontSize="13" Text="{Binding UserDefineID, UpdateSourceTrigger=PropertyChanged}" BorderBrush="DeepPink" Foreground="DeepPink"/>
         <Label Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="383,307,0,0" Foreground="DeepPink"/>
         <Label Content="Location" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="445,307,0,0" Foreground="DeepPink"/>
-        <TextBox x:Name="textbox_UserDefineLocation" MaxLength="8" HorizontalAlignment="Left" Height="26" Margin="505,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="92" FontSize="13" Text="{Binding UserDefineLocation}" BorderBrush="DeepPink" Foreground="DeepPink"/>
+        <TextBox x:Name="textbox_UserDefineLocation" MaxLength="8" HorizontalAlignment="Left" Height="26" Margin="505,307,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" FontSize="13" Text="{Binding UserDefineLocation, UpdateSourceTrigger=PropertyChanged}" BorderBrush="DeepPink" Foreground="DeepPink"/>
     </Grid>
 </UserControl>

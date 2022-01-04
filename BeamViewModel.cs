@@ -60,6 +60,7 @@ namespace BeamName
         public double JawPositionY2 { get; set; }
 
         private Beam _beam { get; }
+        public int TotalBeamNumber { get; private set; }
 
         public BeamViewModel(string beamName, double gantryAngle, int beamNumber, double lastGantryAngle, string energyMode, bool isSetupBeam, string technique, string userDefineLocation, bool isCbctBeam = false)
         {
@@ -108,6 +109,7 @@ namespace BeamName
 
         public void SetProperName(int totalBeamNumber = 0)
         {
+            TotalBeamNumber = totalBeamNumber;
             if (IsSetupBeam)
             {
                 if (!IsCbctBeam) ProperBeamName = "SetupG" + GantryAngle.ToString("0");
@@ -137,7 +139,10 @@ namespace BeamName
                         break;
                 }
                 if (UseEnergyModeInName) ProperBeamName += "_" + EnergyModeDisplayName;
-                if (IsUserDefine) ProperBeamName += "_" + UserDefineLocation;//.ToString();
+                if (IsUserDefine && !ProperBeamName.Contains("Setup") && !ProperBeamName.Contains("CBCT") && !ProperBeamName.StartsWith("LL") && !ProperBeamName.StartsWith("RL"))
+                {
+                    ProperBeamName += "_" + UserDefineLocation;
+                }
             }
         }
 

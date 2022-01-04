@@ -45,11 +45,30 @@ namespace BeamName
             }
         }
 
+        public string UserDefineID { get; set; }
+        public string UserDefineLocation { get; set; }
+
         public UserControl1(ScriptContext scriptContext)
         {
             SC = scriptContext;
             SIU = new Vector(SC.Image.UserOrigin.x, SC.Image.UserOrigin.y, SC.Image.UserOrigin.z);
             IEnumerable<Beam> beams = SC.PlanSetup.Beams;
+            //Here for PlanSum
+            //if (beams is null)
+            //{
+            //    for(int i = 0; i < SC.PlanSumsInScope.Count()-1; i++)
+            //    {
+            //        MessageBoxResult Result = MessageBox.Show("Is this PlanSum you would like to edit the Beam? \n\n"+ SC.PlanSumsInScope.ElementAt(i).Id, "", MessageBoxButton.YesNo);
+            //        if (Result == MessageBoxResult.Yes)
+            //        {
+            //            for (int a = 0; a < SC.PlanSumsInScope.ElementAt(i).PlanSetups.Count()-1; i++)
+            //            {
+            //                beams.(SC.PlanSumsInScope.ElementAt(i).PlanSetups.ElementAt(a).Beams);
+            //            }
+            //            break;
+            //        }
+            //    }
+            //}    
             IEnumerable<Structure> markerStructures = SC.StructureSet.Structures.Where(s => s.DicomType == "MARKER");
             IEnumerable<VVector> isocenters = beams.Where(b => !b.IsSetupField).Select(b => b.IsocenterPosition).Distinct();
             BeamViewModels = new ObservableCollection<BeamViewModel>();
@@ -159,7 +178,23 @@ namespace BeamName
                     BeamIndex += 1;
                 }
                 else beam.SetProperName();
+            }
 
+            if (BeamsListBox != null)
+            {
+                foreach (BeamViewModel beam in BeamsListBox.SelectedItems.OfType<BeamViewModel>())
+                {
+                    beam.IsUserDefine = true;
+                    beam.UserDefineLocation = UserDefineLocation;
+                    try
+                    {
+                        beam.CourseNumber = int.Parse(UserDefineID);
+                    }
+                    catch { }
+                    beam.SetProperName(beam.TotalBeamNumber);
+                    beam.IsUserDefine = false;
+                    beam.CourseNumber = CourseNumber;
+                }
             }
         }
         private void Button_ReName(object sender, RoutedEventArgs e)
@@ -185,6 +220,15 @@ namespace BeamName
             foreach (BeamViewModel beam in BeamViewModels.Where(b => !b.IsSetupBeam))
             {
                 beam.UseEnergyModeInName = checkBox.IsChecked.Value;
+            }
+        }
+
+        private void UserDefine_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            foreach (BeamViewModel beam in BeamViewModels.Where(b => !b.IsSetupBeam))
+            {
+                beam.IsUserDefine = checkBox.IsChecked.Value;
             }
         }
 
@@ -221,15 +265,6 @@ namespace BeamName
             {
                 marker.NewCourse = (CourseNumber + i).ToString();
                 i++;
-            }
-        }
-
-        private void UserDefine_Checked(object sender, RoutedEventArgs e)
-        {
-            CheckBox checkBox = (CheckBox)sender;
-            foreach (BeamViewModel beam in BeamViewModels.Where(b => !b.IsSetupBeam))
-            {
-                beam.IsUserDefine = checkBox.IsChecked.Value;
             }
         }
     }
