@@ -33,6 +33,7 @@ namespace BeamName
         public Vector SIU { get; }
         public string PosId { get; set; }
         public string NewCourse;
+        public IEnumerable<Course> Courses { get; }
         private int _courseNumber = 1;
         public int CourseNumber
         {
@@ -61,9 +62,9 @@ namespace BeamName
             //        MessageBoxResult Result = MessageBox.Show("Is this PlanSum you would like to edit the Beam? \n\n"+ SC.PlanSumsInScope.ElementAt(i).Id, "", MessageBoxButton.YesNo);
             //        if (Result == MessageBoxResult.Yes)
             //        {
-            //            for (int a = 0; a < SC.PlanSumsInScope.ElementAt(i).PlanSetups.Count()-1; i++)
+            //            for (int a = 0; a < SC.PlanSumsInScope.ElementAtOrDefault(i).PlanSetups.Count()-1; i++)
             //            {
-            //                beams.(SC.PlanSumsInScope.ElementAt(i).PlanSetups.ElementAt(a).Beams);
+            //                beams.(SC.PlanSumsInScope.ElementAtOrDefault(i).PlanSetups.ElementAt(a).Beams);
             //            }
             //            break;
             //        }
@@ -71,11 +72,17 @@ namespace BeamName
             //}    
             IEnumerable<Structure> markerStructures = SC.StructureSet.Structures.Where(s => s.DicomType == "MARKER");
             IEnumerable<VVector> isocenters = beams.Where(b => !b.IsSetupField).Select(b => b.IsocenterPosition).Distinct();
+            IEnumerable<Course> Courses = SC.Patient.Courses;
             BeamViewModels = new ObservableCollection<BeamViewModel>();
             MarkerViewModels = new ObservableCollection<MarkerViewModel>();
             CourseNumber = 1;
+            int lastcourse = Courses.Count()-2;
+            string lastbeamcourse = Courses.ElementAtOrDefault(lastcourse).PlanSetups.Where(s => s.ApprovalStatus == PlanSetupApprovalStatus.TreatmentApproved).LastOrDefault().Beams.Where(s => !s.IsSetupField).LastOrDefault().Id.FirstOrDefault().ToString();
+            if (Courses.Count() > 1 & int.TryParse(lastbeamcourse, out int value))
+            {
+                CourseNumber = int.Parse(lastbeamcourse) + 2;
+            }
             NewCourse = "";
-
 
             foreach (var item in beams.Where(b => b.IsSetupField).Select((beam, i) => new { beam, i }))
             {
