@@ -138,11 +138,11 @@ namespace BeamName
                         ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0") + "-G" + LastGantryAngle.ToString("0");
                         break;
                 }
-                if (UseEnergyModeInName) ProperBeamName += "_" + EnergyModeDisplayName;
-                if (IsUserDefine && !ProperBeamName.Contains("Setup") && !ProperBeamName.Contains("CBCT") && !ProperBeamName.StartsWith("LL") && !ProperBeamName.StartsWith("RL"))
+                if (IsUserDefine && !String.IsNullOrEmpty(UserDefineLocation) && !ProperBeamName.Contains("Setup") && !ProperBeamName.Contains("CBCT") && !ProperBeamName.StartsWith("LL") && !ProperBeamName.StartsWith("RL"))
                 {
-                    ProperBeamName += "_" + UserDefineLocation;
+                   ProperBeamName += "_" + UserDefineLocation;
                 }
+                if (UseEnergyModeInName && !String.IsNullOrEmpty(EnergyModeDisplayName)) ProperBeamName += "_" + EnergyModeDisplayName;
             }
         }
 

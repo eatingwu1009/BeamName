@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BeamViewModel.cs" />
+    <Compile Include="L2BConverter.cs" />
     <Compile Include="MarkerViewModel.cs" />
     <Compile Include="Script.cs" />
     <Compile Include="TestContext.cs" />

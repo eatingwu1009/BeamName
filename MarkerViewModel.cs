@@ -26,7 +26,7 @@ namespace BeamName
             get => _positionId;
             set
             {
-                _positionId = value;
+                _positionId = RemoveIsocenter(value);
                 RaisePropertyChanged();
             }
         }
@@ -41,6 +41,8 @@ namespace BeamName
             }
         }
 
+        public string StructureId { get; }
+
         private Image _image { get; }
         private Structure _structure { get; }
         private StructureSet structures { get; }
@@ -50,7 +52,13 @@ namespace BeamName
         {
             Position = position;
             PositionId = positionId;
+            StructureId = RemoveIsocenter(positionId);
             NewCourse = newCourse;
+        }
+
+        private string RemoveIsocenter(string positionId)
+        {
+            return positionId.ToLower().Replace("isocenter", "").Replace("_", "");
         }
     }
 }
