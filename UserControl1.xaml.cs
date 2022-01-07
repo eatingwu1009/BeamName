@@ -222,10 +222,15 @@ namespace BeamName
 
             if (BeamsListBox != null)
             {
+                //foreach (var item in beams.Where(b => b.IsSetupField).Select((beam, i) => new { beam, i }))
+                //BeamsListBox.SelectedItems.
+                int b = 1;
                 foreach (BeamViewModel beam in BeamsListBox.SelectedItems.OfType<BeamViewModel>())
                 {
                     beam.IsUserDefine = true;
                     beam.UserDefineLocation = UserDefineLocation;
+                    beam.TotalBeamNumber = b;
+                    b++;
                     try
                     {
                         beam.CourseNumber = int.Parse(UserDefineID);

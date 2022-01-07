@@ -60,7 +60,7 @@ namespace BeamName
         public double JawPositionY2 { get; set; }
 
         private Beam _beam { get; }
-        public int TotalBeamNumber { get; private set; }
+        public int TotalBeamNumber { get; set; }
 
         public BeamViewModel(string beamName, double gantryAngle, int beamNumber, double lastGantryAngle, string energyMode, bool isSetupBeam, string technique, string userDefineLocation, bool isCbctBeam = false)
         {

@@ -20,11 +20,10 @@
     <Grid Margin="0,0,0,0">
         <Rectangle Fill="#FFF4F4F5" Margin="0,10,0,0" Height="430" Width="700"  VerticalAlignment="Top"/>
         <Label Content="Modify BeamName Here" HorizontalAlignment="Left" Margin="270,35,0,0" VerticalAlignment="Top" Width="327" Background="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}" FontFamily="Comic Sans MS" FontSize="14"/>
-        <TextBox x:Name="textbox" HorizontalAlignment="Left" Height="26" Margin="401,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="49" FontSize="13" Text="{Binding CourseNumber}">
+        <TextBox x:Name="textbox" HorizontalAlignment="Left" Height="26" Margin="401,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="49" FontSize="13" Text="{Binding CourseNumber}" MaxLength="2">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
-                    <Setter Property="Foreground" Value="Red"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="Foreground" Value="Orange"/>
                     <Style.Triggers>
                         <Trigger Property="Text" Value="1">
                             <Setter Property="Foreground" Value="Black"/>
@@ -84,7 +83,7 @@
                             <Style TargetType="{x:Type TextBlock}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self},Path=Text.Length,Converter={StaticResource cbtr}}" Value="True" >
-                                        <Setter Property="Foreground" Value="Red" />
+                                        <Setter Property="Foreground" Value="Orange" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
