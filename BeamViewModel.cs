@@ -43,6 +43,7 @@ namespace BeamName
         }
         public int BeamNumber { get; set; }
         public string EnergyModeDisplayName { get; }
+        public string Setuptechnique { get; }
         public string UserDefineLocation { get; set; }
         private bool _useEnergyModeInName;
         public bool UseEnergyModeInName
@@ -62,7 +63,7 @@ namespace BeamName
         private Beam _beam { get; }
         public int TotalBeamNumber { get; set; }
 
-        public BeamViewModel(string beamName, double gantryAngle, int beamNumber, double lastGantryAngle, string energyMode, bool isSetupBeam, string technique, string userDefineLocation, bool isCbctBeam = false)
+        public BeamViewModel(string beamName, double gantryAngle, int beamNumber, double lastGantryAngle, string energyMode, bool isSetupBeam, string setuptechnique, string technique, string userDefineLocation, bool isCbctBeam = false)
         {
             BeamId = beamName;
             BeamName = beamName;
@@ -72,6 +73,7 @@ namespace BeamName
             EnergyModeDisplayName = energyMode;
             UserDefineLocation = userDefineLocation;
             IsSetupBeam = isSetupBeam;
+            Setuptechnique = setuptechnique;
             Technique = technique;
             IsCbctBeam = isCbctBeam;
             SetProperName();
@@ -90,6 +92,7 @@ namespace BeamName
             GantryAngle = beam.ControlPoints.First().GantryAngle;
             LastGantryAngle = beam.ControlPoints.Last().GantryAngle;
             Technique = beam.Technique.ToString();
+            Setuptechnique = beam.SetupTechnique.ToString();
             IsCbctBeam = isCbctBeam;
             CourseNumber = courseNumber;
             BeamNumber = beamNumber;
@@ -135,7 +138,14 @@ namespace BeamName
                         break;
 
                     default:
-                        ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0") + "-G" + LastGantryAngle.ToString("0");
+                        if (Setuptechnique == "Unknown")
+                        {
+                            ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0.0") + "-G" + LastGantryAngle.ToString("0.0");
+                        }
+                        else
+                        {
+                            ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0") + "-G" + LastGantryAngle.ToString("0");
+                        }
                         break;
                 }
                 if (IsUserDefine && !String.IsNullOrEmpty(UserDefineLocation) && !ProperBeamName.Contains("Setup") && !ProperBeamName.Contains("CBCT") && !ProperBeamName.StartsWith("LL") && !ProperBeamName.StartsWith("RL"))

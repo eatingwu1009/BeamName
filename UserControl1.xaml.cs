@@ -166,13 +166,13 @@ namespace BeamName
 
             SIU = new Vector(0, 0, 0);
 
-            BeamViewModel b1 = new BeamViewModel("Beam A", 1.3294, 1, 30.9242, "aaaa", true, "AAAAA", "", false);
-            BeamViewModel b2 = new BeamViewModel("Beam EWzuikeaile", 2.3492, 2, 34.343, "bbbbb", false, "STATIC", "lung", false);
-            BeamViewModel b3 = new BeamViewModel("Beam Eun-woo", 2.3492, 2, 34.343, "cc", false, "sdsds", "lung", false);
-            BeamViewModel b4 = new BeamViewModel("Beam 90 #1", 90.0, 2, 34.343, "cc", false, "TOTAL", "lung", false);
-            BeamViewModel b5 = new BeamViewModel("Beam 90 #2", 90.0, 2, 34.343, "cc", false, "TOTAL", "lung", false);
-            BeamViewModel b6 = new BeamViewModel("Beam 270 #1", 270.0, 2, 34.343, "cc", false, "TOTAL", "lung", false);
-            BeamViewModel b999 = new BeamViewModel("Last Setup Beam", 0.0, 2, 34.343, "cc", true, "TOTAL", "lung", false);
+            BeamViewModel b1 = new BeamViewModel("Beam A", 1.3294, 1, 30.9242, "aaaa", true, "AAAAA", "", "",false);
+            BeamViewModel b2 = new BeamViewModel("Beam EWzuikeaile", 2.3492, 2, 34.343, "bbbbb", false, "STATIC", "lung", "", false);
+            BeamViewModel b3 = new BeamViewModel("Beam Eun-woo", 2.3492, 2, 34.343, "cc", false, "sdsds", "lung", "", false);
+            BeamViewModel b4 = new BeamViewModel("Beam 90 #1", 90.0, 2, 34.343, "cc", false, "TOTAL", "lung", "", false);
+            BeamViewModel b5 = new BeamViewModel("Beam 90 #2", 90.0, 2, 34.343, "cc", false, "TOTAL", "lung", "", false);
+            BeamViewModel b6 = new BeamViewModel("Beam 270 #1", 270.0, 2, 34.343, "cc", false, "TOTAL", "lung", "", false);
+            BeamViewModel b999 = new BeamViewModel("Last Setup Beam", 0.0, 2, 34.343, "cc", true, "TOTAL", "lung", "", false);
             BeamViewModels.Add(b1);
             BeamViewModels.Add(b2);
             BeamViewModels.Add(b3);
