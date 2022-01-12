@@ -30,6 +30,7 @@ namespace BeamName
         public ObservableCollection<BeamViewModel> BeamViewModels { get; }
         public ObservableCollection<MarkerViewModel> MarkerViewModels { get; }
         public ScriptContext SC { get; }
+        public PlanSetup IsOldPlan { get; }
         public Vector SIU { get; }
         public string PosId { get; set; }
         public string NewCourse;
@@ -92,12 +93,20 @@ namespace BeamName
             BeamViewModels = new ObservableCollection<BeamViewModel>();
             MarkerViewModels = new ObservableCollection<MarkerViewModel>();
             CourseNumber = 1;
-            int lastcourse = Courses.Count()-2;
-            string lastbeamcourse = Courses.ElementAtOrDefault(lastcourse).PlanSetups.Where(s => s.ApprovalStatus == PlanSetupApprovalStatus.TreatmentApproved).LastOrDefault().Beams.Where(s => !s.IsSetupField).LastOrDefault().Id.FirstOrDefault().ToString();
-            if (Courses.Count() > 1 & int.TryParse(lastbeamcourse, out int value))
+            //int lastcourse = Courses.Count() - 2;
+            //string lastbeamcourse = Courses.ElementAtOrDefault(lastcourse).PlanSetups.Where(s => s.ApprovalStatus == PlanSetupApprovalStatus.TreatmentApproved).LastOrDefault().Beams.Where(s => !s.IsSetupField).LastOrDefault().Id.FirstOrDefault().ToString();
+            IsOldPlan = SC.ExternalPlansInScope.Where(s => s.ApprovalStatus == PlanSetupApprovalStatus.TreatmentApproved).LastOrDefault();
+            if (IsOldPlan != null)
             {
-                CourseNumber = int.Parse(lastbeamcourse) + 1;
+                string lastbeamcourse = IsOldPlan.Beams.Where(s => !s.IsSetupField).LastOrDefault().Id.FirstOrDefault().ToString();
+                if (int.TryParse(lastbeamcourse, out int value))
+                {
+
+                    CourseNumber = int.Parse(lastbeamcourse) + 1;
+                }
+
             }
+
             NewCourse = "";
 
             foreach (var item in beams.Where(b => b.IsSetupField).Select((beam, i) => new { beam, i }))
@@ -111,17 +120,18 @@ namespace BeamName
                 BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
             }
 
-            Vector userOrigin = new Vector(0.0, 0.0, 0.0);
-            MarkerViewModels.Add(new MarkerViewModel(userOrigin, "", NewCourse.ToString()));
+            //Vector userOrigin = new Vector(0.0, 0.0, 0.0);
+            //MarkerViewModels.Add(new MarkerViewModel(userOrigin, "", NewCourse.ToString()));
 
             foreach (var iso in isocenters)
             {
+                Vector translatedIsocenter = TransformToOrigin(new Vector(iso));
+                MarkerViewModels.Add(new MarkerViewModel(translatedIsocenter, "", NewCourse));
                 foreach (Structure structure in markerStructures)
                 {
                     if (IsNear(structure.CenterPoint, iso))
                     {
-                        Vector translatedIsocenter = TransformToOrigin(new Vector(structure.CenterPoint));
-                        MarkerViewModels.Add(new MarkerViewModel(translatedIsocenter, structure.Id, NewCourse));
+                        MarkerViewModels.Where(s => s.Position.Equals(translatedIsocenter)).FirstOrDefault().PositionId = structure.Id ;
                     }
                 }
             }
