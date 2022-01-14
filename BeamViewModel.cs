@@ -148,12 +148,12 @@ namespace BeamName
                         }
                         break;
                 }
-                if (IsUserDefine && !String.IsNullOrEmpty(UserDefineLocation) && !ProperBeamName.Contains("Setup") && !ProperBeamName.Contains("CBCT") && !ProperBeamName.StartsWith("LL") && !ProperBeamName.StartsWith("RL"))
-                {
-                   ProperBeamName += "_" + UserDefineLocation;
-                }
-                if (UseEnergyModeInName && !String.IsNullOrEmpty(EnergyModeDisplayName)) ProperBeamName += "_" + EnergyModeDisplayName;
             }
+            if (IsUserDefine && !String.IsNullOrEmpty(UserDefineLocation) && !ProperBeamName.StartsWith("LL") && !ProperBeamName.StartsWith("RL"))
+            {
+                ProperBeamName += "_" + UserDefineLocation;
+            }
+            if (UseEnergyModeInName && !String.IsNullOrEmpty(EnergyModeDisplayName)) ProperBeamName += "_" + EnergyModeDisplayName;
         }
 
         public void RenameBeam()

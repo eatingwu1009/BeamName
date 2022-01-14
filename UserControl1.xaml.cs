@@ -61,7 +61,7 @@ namespace BeamName
             {
                 for (int i = 0; i < SC.PlanSumsInScope.Count(); i++)
                 {
-                    MessageBoxResult Result = MessageBox.Show("Is this PlanSum you would like to edit the Beam? \n\n" + SC.PlanSumsInScope.ElementAt(i).Id, "", MessageBoxButton.YesNo);
+                    MessageBoxResult Result = MessageBox.Show("Is this PlanSum you would like to edit the Beam? \n\n" + SC.PlanSumsInScope.ElementAt(i).PlanSetups.LastOrDefault().CreationDateTime +" : "+ SC.PlanSumsInScope.ElementAt(i).Id, "", MessageBoxButton.YesNo);
                     if (Result == MessageBoxResult.Yes)
                     {
                         StructureSet PlanSumSS = SC.PlanSumsInScope.ElementAt(i).StructureSet;
@@ -320,6 +320,10 @@ namespace BeamName
                     if (IsNear(beamPosition, marker.Position))
                     {
                         beamViewModel.UserDefineLocation = marker.PositionId;
+                        if (int.TryParse(marker.NewCourse, out int value))
+                        {
+                            beamViewModel.CourseNumber = int.Parse(marker.NewCourse);
+                        }
                     }
                 }
             }
