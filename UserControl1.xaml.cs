@@ -101,7 +101,6 @@ namespace BeamName
                 string lastbeamcourse = IsOldPlan.Beams.Where(s => !s.IsSetupField).LastOrDefault().Id.FirstOrDefault().ToString();
                 if (int.TryParse(lastbeamcourse, out int value))
                 {
-
                     CourseNumber = int.Parse(lastbeamcourse) + 1;
                 }
 
@@ -115,7 +114,11 @@ namespace BeamName
                 if (item.i == beams.Where(b => b.IsSetupField).Count() - 1 && gantryAngle == 0) BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, true));
                 else BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
             }
-            foreach (var item in beams.Where(b => !b.IsSetupField).Select((beam, i) => new { beam, i }))
+            foreach (var item in beams.Where(b => !b.IsSetupField && !b.ControlPoints.FirstOrDefault().PatientSupportAngle.Equals(0)).Select((beam, i) => new { beam, i }))
+            {
+                BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
+            }
+            foreach (var item in beams.Where(b => !b.IsSetupField && b.ControlPoints.FirstOrDefault().PatientSupportAngle.Equals(0)).Select((beam, i) => new { beam, i }))
             {
                 BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
             }
@@ -204,8 +207,9 @@ namespace BeamName
         private void Button_Apply(object sender, RoutedEventArgs e)
         {
             RefreshBeamName();
+            UpdateBeamCourseNumbers(CourseNumber);
         }
-        private void RefreshBeamName()
+            private void RefreshBeamName()
         {
             int lBeamIndex = 1;
             int rBeamIndex = 1;
@@ -295,18 +299,17 @@ namespace BeamName
 
         private void UpdateBeamCourseNumbers(int courseNumber)
         {
-
-                foreach (BeamViewModel beam in BeamViewModels)
-                {
-                    beam.CourseNumber = courseNumber;
-                }
+            foreach (BeamViewModel beam in BeamViewModels)
+            {
+                beam.CourseNumber = courseNumber;
+            }
         }
-
 
         private void DifIso_isChecked(object sender, RoutedEventArgs e)
         {
             UpdateBeamCourseNumbers(CourseNumber);
             int i = 0;
+            int t = 1;
             foreach (MarkerViewModel marker in MarkerViewModels)
             {
                 marker.NewCourse = (CourseNumber + i).ToString();
@@ -315,7 +318,6 @@ namespace BeamName
                 foreach (BeamViewModel beamViewModel in BeamViewModels)
                 {
                     beamViewModel.IsUserDefine = true;
-
                     Vector beamPosition = TransformToOrigin(new Vector(beamViewModel.IsocenterX, beamViewModel.IsocenterY, beamViewModel.IsocenterZ));
                     if (IsNear(beamPosition, marker.Position))
                     {
@@ -332,11 +334,11 @@ namespace BeamName
         private void DifIso_isUnchecked(object sender, RoutedEventArgs e)
         {
             UpdateBeamCourseNumbers(CourseNumber);
-            int i = 0;
+            int a = 0;
             foreach (MarkerViewModel marker in MarkerViewModels)
             {
-                marker.NewCourse = (CourseNumber + i).ToString();
-                i++;
+                marker.NewCourse = (CourseNumber + a).ToString();
+                a++;
 
                 foreach (BeamViewModel beamViewModel in BeamViewModels)
                 {

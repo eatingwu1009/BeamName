@@ -129,22 +129,22 @@ namespace BeamName
                     case "TOTAL":
                         if (GantryAngle == 90)
                         {
-                            ProperBeamName = "LL-" + totalBeamNumber.ToString(); 
+                            ProperBeamName = "LL-" + totalBeamNumber.ToString();
                         }
-                        else 
+                        else
                         {
-                            ProperBeamName = "RL-"+ totalBeamNumber.ToString();
+                            ProperBeamName = "RL-" + totalBeamNumber.ToString();
                         }
                         break;
 
                     default:
                         if (Setuptechnique == "Unknown")
                         {
-                            ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0.0") + "-G" + LastGantryAngle.ToString("0.0");
+                            ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0.0") + "-" + LastGantryAngle.ToString("0.0");
                         }
                         else
                         {
-                            ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0") + "-G" + LastGantryAngle.ToString("0");
+                            ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0") + "-" + LastGantryAngle.ToString("0");
                         }
                         break;
                 }
@@ -153,9 +153,11 @@ namespace BeamName
             {
                 ProperBeamName += "_" + UserDefineLocation;
             }
-            if (UseEnergyModeInName && !String.IsNullOrEmpty(EnergyModeDisplayName)) ProperBeamName += "_" + EnergyModeDisplayName;
+            if (UseEnergyModeInName && !String.IsNullOrEmpty(EnergyModeDisplayName))
+            {
+                ProperBeamName += "_" + EnergyModeDisplayName;
+            }
         }
-
         public void RenameBeam()
         {
             _beam.Id = ProperBeamName;
