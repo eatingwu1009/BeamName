@@ -45,7 +45,7 @@
                                 <Label Width="145" Height="24" Content="{Binding Position, Converter={StaticResource VectorConverter}}" />
                                 <TextBox Width="35" Height="24" TextWrapping="Wrap" Text="{Binding NewCourse}" MaxLength="2" />
                                 <Label Width="35" Height="24"  />
-                                <TextBox Width="90" Height="24" TextWrapping="Wrap" Text="{Binding PositionId}" MaxLength="8"/>
+                                <TextBox Width="90" Height="24" TextWrapping="Wrap" Text="{Binding PositionId}" MaxLength="8" CharacterCasing="Normal"/>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

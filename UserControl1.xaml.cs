@@ -57,6 +57,7 @@ namespace BeamName
             List<Beam> beams = new List<Beam>();
             List<Structure> markerStructures = new List<Structure>();
             //Here for PlanSum
+            int q = 0;
             if (SC.PlanSetup is null)
             {
                 for (int i = 0; i < SC.PlanSumsInScope.Count(); i++)
@@ -74,6 +75,7 @@ namespace BeamName
                         {
                             foreach (Beam beam in SC.PlanSumsInScope.ElementAt(i).PlanSetups.ElementAt(a).Beams) beams.Add(beam);
                         }
+                        q = i;
                         break;
                     }
                 }
@@ -116,12 +118,15 @@ namespace BeamName
             }
             foreach (var item in beams.Where(b => !b.IsSetupField && !b.ControlPoints.FirstOrDefault().PatientSupportAngle.Equals(0)).Select((beam, i) => new { beam, i }))
             {
-                BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
+                 BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
             }
             foreach (var item in beams.Where(b => !b.IsSetupField && b.ControlPoints.FirstOrDefault().PatientSupportAngle.Equals(0)).Select((beam, i) => new { beam, i }))
             {
                 BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
             }
+
+
+            
 
             //Vector userOrigin = new Vector(0.0, 0.0, 0.0);
             //MarkerViewModels.Add(new MarkerViewModel(userOrigin, "", NewCourse.ToString()));
@@ -207,7 +212,6 @@ namespace BeamName
         private void Button_Apply(object sender, RoutedEventArgs e)
         {
             RefreshBeamName();
-            UpdateBeamCourseNumbers(CourseNumber);
         }
             private void RefreshBeamName()
         {
@@ -309,7 +313,6 @@ namespace BeamName
         {
             UpdateBeamCourseNumbers(CourseNumber);
             int i = 0;
-            int t = 1;
             foreach (MarkerViewModel marker in MarkerViewModels)
             {
                 marker.NewCourse = (CourseNumber + i).ToString();
@@ -327,6 +330,7 @@ namespace BeamName
                             beamViewModel.CourseNumber = int.Parse(marker.NewCourse);
                         }
                     }
+                    
                 }
             }
         }
