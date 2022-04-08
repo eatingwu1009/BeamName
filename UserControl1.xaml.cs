@@ -46,11 +46,21 @@ namespace BeamName
                 RaisePropertyChanged();
             }
         }
+        private bool _difIsoIsChecked = false;
+        public bool DifIsoIsChecked
+        {
+            get => _difIsoIsChecked;
+            set
+            {
+                _difIsoIsChecked = value;
+                RaisePropertyChanged(nameof(DifIsoIsChecked));
+            }
+        }
 
         public string UserDefineID { get; set; }
         public string UserDefineLocation { get; set; }
 
-    public UserControl1(ScriptContext scriptContext)
+        public UserControl1(ScriptContext scriptContext)
         {
             SC = scriptContext;
 
@@ -62,12 +72,12 @@ namespace BeamName
             {
                 for (int i = 0; i < SC.PlanSumsInScope.Count(); i++)
                 {
-                    MessageBoxResult Result = MessageBox.Show("Is this PlanSum you would like to edit the Beam? \n\n" + SC.PlanSumsInScope.ElementAt(i).PlanSetups.LastOrDefault().CreationDateTime +" : "+ SC.PlanSumsInScope.ElementAt(i).Id, "", MessageBoxButton.YesNo);
+                    MessageBoxResult Result = MessageBox.Show("Is this PlanSum you would like to edit the Beam? \n\n" + SC.PlanSumsInScope.ElementAt(i).PlanSetups.LastOrDefault().CreationDateTime + " : " + SC.PlanSumsInScope.ElementAt(i).Id, "", MessageBoxButton.YesNo);
                     if (Result == MessageBoxResult.Yes)
                     {
                         StructureSet PlanSumSS = SC.PlanSumsInScope.ElementAt(i).StructureSet;
                         SIU = new Vector(PlanSumSS.Image.UserOrigin.x, PlanSumSS.Image.UserOrigin.y, PlanSumSS.Image.UserOrigin.z);
-                        foreach (Structure st in PlanSumSS.Structures.Where(s => s.DicomType == "MARKER")) 
+                        foreach (Structure st in PlanSumSS.Structures.Where(s => s.DicomType == "MARKER"))
                         {
                             markerStructures.Add(st);
                         }
@@ -82,9 +92,9 @@ namespace BeamName
             }
             else
             {
-                beams = SC.PlanSetup.Beams.ToList(); 
+                beams = SC.PlanSetup.Beams.ToList();
                 SIU = new Vector(SC.Image.UserOrigin.x, SC.Image.UserOrigin.y, SC.Image.UserOrigin.z);
-                foreach(Structure st in SC.StructureSet.Structures.Where(s => s.DicomType == "MARKER"))
+                foreach (Structure st in SC.StructureSet.Structures.Where(s => s.DicomType == "MARKER"))
                 {
                     markerStructures.Add(st);
                 }
@@ -118,7 +128,7 @@ namespace BeamName
             }
             foreach (var item in beams.Where(b => !b.IsSetupField && !b.ControlPoints.FirstOrDefault().PatientSupportAngle.Equals(0)).Select((beam, i) => new { beam, i }))
             {
-                 BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
+                BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
             }
             foreach (var item in beams.Where(b => !b.IsSetupField && b.ControlPoints.FirstOrDefault().PatientSupportAngle.Equals(0)).Select((beam, i) => new { beam, i }))
             {
@@ -126,7 +136,7 @@ namespace BeamName
             }
 
 
-            
+
 
             //Vector userOrigin = new Vector(0.0, 0.0, 0.0);
             //MarkerViewModels.Add(new MarkerViewModel(userOrigin, "", NewCourse.ToString()));
@@ -139,7 +149,7 @@ namespace BeamName
                 {
                     if (IsNear(structure.CenterPoint, iso))
                     {
-                        MarkerViewModels.Where(s => s.Position.Equals(translatedIsocenter)).FirstOrDefault().PositionId = structure.Id ;
+                        MarkerViewModels.Where(s => s.Position.Equals(translatedIsocenter)).FirstOrDefault().PositionId = structure.Id;
                     }
                 }
             }
@@ -184,20 +194,26 @@ namespace BeamName
 
             SIU = new Vector(0, 0, 0);
 
-            BeamViewModel b1 = new BeamViewModel("Beam A", 1.3294, 1, 30.9242, "aaaa", true, "AAAAA", "", "",false);
-            BeamViewModel b2 = new BeamViewModel("Beam EWzuikeaile", 2.3492, 2, 34.343, "bbbbb", false, "STATIC", "lung", "", false);
-            BeamViewModel b3 = new BeamViewModel("Beam Eun-woo", 2.3492, 2, 34.343, "cc", false, "sdsds", "lung", "", false);
-            BeamViewModel b4 = new BeamViewModel("Beam 90 #1", 90.0, 2, 34.343, "cc", false, "TOTAL", "lung", "", false);
-            BeamViewModel b5 = new BeamViewModel("Beam 90 #2", 90.0, 2, 34.343, "cc", false, "TOTAL", "lung", "", false);
-            BeamViewModel b6 = new BeamViewModel("Beam 270 #1", 270.0, 2, 34.343, "cc", false, "TOTAL", "lung", "", false);
-            BeamViewModel b999 = new BeamViewModel("Last Setup Beam", 0.0, 2, 34.343, "cc", true, "TOTAL", "lung", "", false);
-            BeamViewModels.Add(b1);
-            BeamViewModels.Add(b2);
-            BeamViewModels.Add(b3);
-            BeamViewModels.Add(b4);
-            BeamViewModels.Add(b5);
-            BeamViewModels.Add(b6);
-            BeamViewModels.Add(b999);
+            //BeamViewModel b1 = new BeamViewModel("Beam A", 1.3294, 1, 30.9242, "aaaa", true, "AAAAA", "", "",false);
+            //BeamViewModel b2 = new BeamViewModel("Beam EWzuikeaile", 2.3492, 2, 34.343, "bbbbb", false, "STATIC", "lung", "", false);
+            //BeamViewModel b3 = new BeamViewModel("Beam Eun-woo", 2.3492, 2, 34.343, "cc", false, "sdsds", "lung", "", false);
+            //BeamViewModel b4 = new BeamViewModel("Beam 90 #1", 90.0, 2, 34.343, "cc", false, "TOTAL", "lung", "", false);
+            //BeamViewModel b5 = new BeamViewModel("Beam 90 #2", 90.0, 2, 34.343, "cc", false, "TOTAL", "lung", "", false);
+            //BeamViewModel b6 = new BeamViewModel("Beam 270 #1", 270.0, 2, 34.343, "cc", false, "TOTAL", "lung", "", false);
+            //BeamViewModel b999 = new BeamViewModel("Last Setup Beam", 0.0, 2, 34.343, "cc", true, "TOTAL", "lung", "", false);
+            //BeamViewModels.Add(b1);
+            //BeamViewModels.Add(b2);
+            //BeamViewModels.Add(b3);
+            //BeamViewModels.Add(b4);
+            //BeamViewModels.Add(b5);
+            //BeamViewModels.Add(b6);
+            //BeamViewModels.Add(b999);
+
+            for (int i = 0; i < 5; i++)
+            {
+                BeamViewModel b = new BeamViewModel("AAA", 0, i, 0, i.ToString(), true, "", "", "");
+                BeamViewModels.Add(b);
+            }
 
             RefreshBeamName();
             InitializeComponent();
@@ -213,7 +229,7 @@ namespace BeamName
         {
             RefreshBeamName();
         }
-            private void RefreshBeamName()
+        private void RefreshBeamName()
         {
             int lBeamIndex = 1;
             int rBeamIndex = 1;
@@ -330,7 +346,7 @@ namespace BeamName
                             beamViewModel.CourseNumber = int.Parse(marker.NewCourse);
                         }
                     }
-                    
+
                 }
             }
         }
@@ -354,6 +370,12 @@ namespace BeamName
                     }
                 }
             }
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (DifIsoIsChecked) DifIso_isChecked(null, null);
+            else DifIso_isUnchecked(null, null);
         }
     }
 }

@@ -7,6 +7,7 @@ C:\Users\aria\source\repos\Projects\0_BeamName\obj\x64\Debug\BeamName.esapi_Mark
 C:\Users\aria\source\repos\Projects\0_BeamName\obj\x64\Debug\UserControl1.baml
 C:\Users\aria\source\repos\Projects\0_BeamName\obj\x64\Debug\BeamName.esapi.g.resources
 C:\Users\aria\source\repos\Projects\0_BeamName\obj\x64\Debug\BeamName.csproj.CoreCompileInputs.cache
-C:\Users\aria\source\repos\Projects\0_BeamName\obj\x64\Debug\BeamName.esapi.dll
 C:\Users\aria\source\repos\Projects\0_BeamName\obj\x64\Debug\BeamName.esapi.pdb
 C:\Users\aria\source\repos\Projects\0_BeamName\obj\x64\Debug\BeamName.csproj.AssemblyReference.cache
+C:\Users\aria\source\repos\Projects\0_BeamName\obj\x64\Debug\BeamName.esapi.exe
+C:\Users\aria\source\repos\Projects\BeamName.esapi.exe
