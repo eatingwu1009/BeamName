@@ -116,7 +116,8 @@ namespace BeamName
             // setup beams must be the first beams
             if (IsSetupBeam)
             {
-                if (BeamNumber % 2 == 0) ProperBeamName = "SetupG" + GantryAngle.ToString("0");
+                if (GantryAngle != 0.0) ProperBeamName = "SetupG" + GantryAngle.ToString("##0");
+                else if (BeamNumber % 2 == 0) ProperBeamName = "SetupG" + GantryAngle.ToString("0");
                 else ProperBeamName = "CBCT";
             }
             else

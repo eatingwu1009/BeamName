@@ -120,7 +120,7 @@ namespace BeamName
 
             NewCourse = "";
 
-            foreach (var item in beams.Where(b => b.IsSetupField).Select((beam, i) => new { beam, i }))
+            foreach (var item in beams.Where(b => b.IsSetupField).OrderBy(b => b.ControlPoints.First().GantryAngle).Select((beam, i) => new { beam, i }))
             {
                 double gantryAngle = item.beam.ControlPoints.First().GantryAngle;
                 if (item.i == beams.Where(b => b.IsSetupField).Count() - 1 && gantryAngle == 0) BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, true));
