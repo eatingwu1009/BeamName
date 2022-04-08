@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VMS.TPS.Common.Model.API;
 using VMS.TPS.Common.Model.Types;
+using System.Text.RegularExpressions;
 
 namespace BeamName
 {
@@ -58,7 +59,9 @@ namespace BeamName
 
         private string RemoveIsocenter(string positionId)
         {
-            return positionId.ToLower().Replace("isocenter", "").Replace("_", "");
+            string newPositionId = Regex.Replace(positionId, "isocenter", "", RegexOptions.IgnoreCase);
+            newPositionId = newPositionId.Replace("_", "");
+            return newPositionId;
         }
     }
 }
