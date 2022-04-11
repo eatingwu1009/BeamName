@@ -9,3 +9,4 @@ C:\Users\aria\source\repos\Projects\0_BeamName\obj\x64\Debug\BeamName.esapi.g.re
 C:\Users\aria\source\repos\Projects\0_BeamName\obj\x64\Debug\BeamName.csproj.CoreCompileInputs.cache
 C:\Users\aria\source\repos\Projects\0_BeamName\obj\x64\Debug\BeamName.esapi.pdb
 C:\Users\aria\source\repos\Projects\0_BeamName\obj\x64\Debug\BeamName.esapi.dll
+C:\Users\aria\source\repos\Projects\0_BeamName\obj\x64\Debug\BeamName.csproj.AssemblyReference.cache

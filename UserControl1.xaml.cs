@@ -120,23 +120,36 @@ namespace BeamName
 
             NewCourse = "";
 
-            foreach (var item in beams.Where(b => b.IsSetupField).OrderBy(b => b.ControlPoints.First().GantryAngle).Select((beam, i) => new { beam, i }))
+            IEnumerable<Beam> setupBeams = beams.Where(b => b.IsSetupField).OrderBy(b => b.ControlPoints.First().GantryAngle);
+            foreach (var item in setupBeams.Select((beam, i) => new { beam, i }))
             {
                 double gantryAngle = item.beam.ControlPoints.First().GantryAngle;
                 if (item.i == beams.Where(b => b.IsSetupField).Count() - 1 && gantryAngle == 0) BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, true));
                 else BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
             }
-            foreach (var item in beams.Where(b => !b.IsSetupField && !b.ControlPoints.FirstOrDefault().PatientSupportAngle.Equals(0)).Select((beam, i) => new { beam, i }))
+
+            IEnumerable<Beam> couchNonZeroBeams = beams
+                .Where(b => !b.IsSetupField && !b.ControlPoints.FirstOrDefault().PatientSupportAngle.Equals(0))
+                .OrderBy(b => new Tuple<double, double, double> (b.IsocenterPosition.x, b.IsocenterPosition.y, b.IsocenterPosition.z));
+            Dictionary<Tuple<double, double, double>, int> isocenterToBeamNumber = isocenters.ToDictionary(i => new Tuple<double, double, double>(i.x, i.y, i.z), i => 1);
+            foreach (Beam beam in couchNonZeroBeams)
             {
-                BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
+                VVector ip = beam.IsocenterPosition;
+                var key = new Tuple<double, double, double>(ip.x, ip.y, ip.z);
+                BeamViewModels.Add(new BeamViewModel(beam, CourseNumber, isocenterToBeamNumber[key], false));
+                isocenterToBeamNumber[key] = isocenterToBeamNumber[key] + 1;
             }
-            foreach (var item in beams.Where(b => !b.IsSetupField && b.ControlPoints.FirstOrDefault().PatientSupportAngle.Equals(0)).Select((beam, i) => new { beam, i }))
+
+            IEnumerable<Beam> couchZeroBeams = beams
+                .Where(b => !b.IsSetupField && b.ControlPoints.FirstOrDefault().PatientSupportAngle.Equals(0))
+                .OrderBy(b => new Tuple<double, double, double>(b.IsocenterPosition.x, b.IsocenterPosition.y, b.IsocenterPosition.z));
+            foreach (Beam beam in couchZeroBeams)
             {
-                BeamViewModels.Add(new BeamViewModel(item.beam, CourseNumber, item.i, false));
+                VVector ip = beam.IsocenterPosition;
+                var key = new Tuple<double, double, double>(ip.x, ip.y, ip.z);
+                BeamViewModels.Add(new BeamViewModel(beam, CourseNumber, isocenterToBeamNumber[key], false));
+                isocenterToBeamNumber[key] = isocenterToBeamNumber[key] + 1;
             }
-
-
-
 
             //Vector userOrigin = new Vector(0.0, 0.0, 0.0);
             //MarkerViewModels.Add(new MarkerViewModel(userOrigin, "", NewCourse.ToString()));
@@ -263,14 +276,14 @@ namespace BeamName
                 {
                     beam.IsUserDefine = true;
                     beam.UserDefineLocation = UserDefineLocation;
-                    beam.TotalBeamNumber = b;
+                    beam.BeamNumber = b;
                     b++;
                     try
                     {
                         beam.CourseNumber = int.Parse(UserDefineID);
                     }
                     catch { }
-                    beam.SetProperName(beam.TotalBeamNumber);
+                    beam.SetProperName(beam.BeamNumber);
                     beam.IsUserDefine = false;
                 }
             }

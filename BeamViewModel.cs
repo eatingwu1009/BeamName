@@ -61,7 +61,6 @@ namespace BeamName
         public double JawPositionY2 { get; set; }
 
         private Beam _beam { get; }
-        public int TotalBeamNumber { get; set; }
 
         public BeamViewModel(string beamName, double gantryAngle, int beamNumber, double lastGantryAngle, string energyMode, bool isSetupBeam, string setuptechnique, string technique, string userDefineLocation, bool isCbctBeam = false)
         {
@@ -112,7 +111,6 @@ namespace BeamName
 
         public void SetProperName(int totalBeamNumber = 0)
         {
-            TotalBeamNumber = totalBeamNumber;
             // setup beams must be the first beams
             if (IsSetupBeam)
             {
@@ -126,7 +124,7 @@ namespace BeamName
                 {
                     case "STATIC":
                     case "SRS STATIC":
-                        ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0");
+                        ProperBeamName = CourseNumber.ToString() + "-" + BeamNumber.ToString() + "G" + GantryAngle.ToString("0");
                         break;
                     case "TOTAL":
                         if (GantryAngle == 90)
@@ -142,11 +140,11 @@ namespace BeamName
                     default:
                         if (Setuptechnique == "Unknown")
                         {
-                            ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0.0") + "-" + LastGantryAngle.ToString("0.0");
+                            ProperBeamName = CourseNumber.ToString() + "-" + BeamNumber.ToString() + "G" + GantryAngle.ToString("0.0") + "-" + LastGantryAngle.ToString("0.0");
                         }
                         else
                         {
-                            ProperBeamName = CourseNumber.ToString() + "-" + totalBeamNumber.ToString() + "G" + GantryAngle.ToString("0") + "-" + LastGantryAngle.ToString("0");
+                            ProperBeamName = CourseNumber.ToString() + "-" + BeamNumber.ToString() + "G" + GantryAngle.ToString("0") + "-" + LastGantryAngle.ToString("0");
                         }
                         break;
                 }
