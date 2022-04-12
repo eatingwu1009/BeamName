@@ -72,7 +72,9 @@ namespace BeamName
             {
                 for (int i = 0; i < SC.PlanSumsInScope.Count(); i++)
                 {
-                    MessageBoxResult Result = MessageBox.Show("Is this PlanSum you would like to edit the Beam? \n\n" + SC.PlanSumsInScope.ElementAt(i).PlanSetups.LastOrDefault().CreationDateTime + " : " + SC.PlanSumsInScope.ElementAt(i).Id, "", MessageBoxButton.YesNo);
+                    MessageBoxResult Result = MessageBox.Show("Is this PlanSum you would like to edit the Beam? \n\n" 
+                        + SC.PlanSumsInScope.ElementAt(i).PlanSetups.LastOrDefault().CreationDateTime + " : " 
+                        + SC.PlanSumsInScope.ElementAt(i).Id, "", MessageBoxButton.YesNo);
                     if (Result == MessageBoxResult.Yes)
                     {
                         StructureSet PlanSumSS = SC.PlanSumsInScope.ElementAt(i).StructureSet;
@@ -137,7 +139,10 @@ namespace BeamName
                 VVector ip = beam.IsocenterPosition;
                 var key = new Tuple<double, double, double>(ip.x, ip.y, ip.z);
                 BeamViewModels.Add(new BeamViewModel(beam, CourseNumber, isocenterToBeamNumber[key], false));
+                if( !beam.Technique.ToString().Equals("TOTAL"))
+                {
                 isocenterToBeamNumber[key] = isocenterToBeamNumber[key] + 1;
+                }    
             }
 
             IEnumerable<Beam> couchZeroBeams = beams
@@ -148,7 +153,10 @@ namespace BeamName
                 VVector ip = beam.IsocenterPosition;
                 var key = new Tuple<double, double, double>(ip.x, ip.y, ip.z);
                 BeamViewModels.Add(new BeamViewModel(beam, CourseNumber, isocenterToBeamNumber[key], false));
-                isocenterToBeamNumber[key] = isocenterToBeamNumber[key] + 1;
+                if (!beam.Technique.ToString().Equals("TOTAL"))
+                {
+                    isocenterToBeamNumber[key] = isocenterToBeamNumber[key] + 1;
+                }
             }
 
             //Vector userOrigin = new Vector(0.0, 0.0, 0.0);
@@ -367,12 +375,9 @@ namespace BeamName
         private void DifIso_isUnchecked(object sender, RoutedEventArgs e)
         {
             UpdateBeamCourseNumbers(CourseNumber);
-            int a = 0;
             foreach (MarkerViewModel marker in MarkerViewModels)
             {
-                marker.NewCourse = (CourseNumber + a).ToString();
-                a++;
-
+                marker.NewCourse = CourseNumber.ToString();
                 foreach (BeamViewModel beamViewModel in BeamViewModels)
                 {
                     beamViewModel.IsUserDefine = false;
