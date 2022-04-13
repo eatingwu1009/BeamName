@@ -43,7 +43,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <Label Width="145" Height="24" Content="{Binding Position, Converter={StaticResource VectorConverter}}" />
-                                <TextBox Width="35" Height="24" TextWrapping="Wrap" Text="{Binding NewCourse}" MaxLength="2" />
+                                <TextBox Width="35" Height="24" TextWrapping="Wrap" Text="{Binding NewCourse, UpdateSourceTrigger=PropertyChanged}"  MaxLength="2"/>
                                 <Label Width="35" Height="24"  />
                                 <TextBox Width="90" Height="24" TextWrapping="Wrap" Text="{Binding PositionId, UpdateSourceTrigger=PropertyChanged}" MaxLength="8" CharacterCasing="Normal" TextChanged="TextBox_TextChanged"/>
                             </StackPanel>

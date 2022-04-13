@@ -2,21 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using VMS.TPS.Common.Model.API;
 using VMS.TPS.Common.Model.Types;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -33,7 +22,6 @@ namespace BeamName
         public PlanSetup IsOldPlan { get; }
         public Vector SIU { get; }
         public string PosId { get; set; }
-        public string NewCourse;
         public IEnumerable<Course> Courses { get; }
         private int _courseNumber = 1;
         public int CourseNumber
@@ -72,8 +60,8 @@ namespace BeamName
             {
                 for (int i = 0; i < SC.PlanSumsInScope.Count(); i++)
                 {
-                    MessageBoxResult Result = MessageBox.Show("Is this PlanSum you would like to edit the Beam? \n\n" 
-                        + SC.PlanSumsInScope.ElementAt(i).PlanSetups.LastOrDefault().CreationDateTime + " : " 
+                    MessageBoxResult Result = MessageBox.Show("Is this PlanSum you would like to edit the Beam? \n\n"
+                        + SC.PlanSumsInScope.ElementAt(i).PlanSetups.LastOrDefault().CreationDateTime + " : "
                         + SC.PlanSumsInScope.ElementAt(i).Id, "", MessageBoxButton.YesNo);
                     if (Result == MessageBoxResult.Yes)
                     {
@@ -120,8 +108,6 @@ namespace BeamName
 
             }
 
-            NewCourse = "";
-
             IEnumerable<Beam> setupBeams = beams.Where(b => b.IsSetupField).OrderBy(b => b.ControlPoints.First().GantryAngle);
             foreach (var item in setupBeams.Select((beam, i) => new { beam, i }))
             {
@@ -132,17 +118,17 @@ namespace BeamName
 
             IEnumerable<Beam> couchNonZeroBeams = beams
                 .Where(b => !b.IsSetupField && !b.ControlPoints.FirstOrDefault().PatientSupportAngle.Equals(0))
-                .OrderBy(b => new Tuple<double, double, double> (b.IsocenterPosition.x, b.IsocenterPosition.y, b.IsocenterPosition.z));
+                .OrderBy(b => new Tuple<double, double, double>(b.IsocenterPosition.x, b.IsocenterPosition.y, b.IsocenterPosition.z));
             Dictionary<Tuple<double, double, double>, int> isocenterToBeamNumber = isocenters.ToDictionary(i => new Tuple<double, double, double>(i.x, i.y, i.z), i => 1);
             foreach (Beam beam in couchNonZeroBeams)
             {
                 VVector ip = beam.IsocenterPosition;
                 var key = new Tuple<double, double, double>(ip.x, ip.y, ip.z);
                 BeamViewModels.Add(new BeamViewModel(beam, CourseNumber, isocenterToBeamNumber[key], false));
-                if( !beam.Technique.ToString().Equals("TOTAL"))
+                if (!beam.Technique.ToString().Equals("TOTAL"))
                 {
-                isocenterToBeamNumber[key] = isocenterToBeamNumber[key] + 1;
-                }    
+                    isocenterToBeamNumber[key] = isocenterToBeamNumber[key] + 1;
+                }
             }
 
             IEnumerable<Beam> couchZeroBeams = beams
@@ -165,7 +151,7 @@ namespace BeamName
             foreach (var iso in isocenters)
             {
                 Vector translatedIsocenter = TransformToOrigin(new Vector(iso));
-                MarkerViewModels.Add(new MarkerViewModel(translatedIsocenter, "", NewCourse));
+                MarkerViewModels.Add(new MarkerViewModel(translatedIsocenter, "", ""));
                 foreach (Structure structure in markerStructures)
                 {
                     if (IsNear(structure.CenterPoint, iso))
@@ -236,6 +222,12 @@ namespace BeamName
                 BeamViewModels.Add(b);
             }
 
+            for (int i = 0; i < 5; i++)
+            {
+                BeamViewModel b = new BeamViewModel("BBB" + i.ToString(), 0, i, 0, i.ToString(), false, "", "", "");
+                BeamViewModels.Add(b);
+            }
+
             RefreshBeamName();
             InitializeComponent();
             DataContext = this;
@@ -252,6 +244,7 @@ namespace BeamName
         }
         private void RefreshBeamName()
         {
+            if (DifIsoIsChecked) DoIsoRefresh();
             int lBeamIndex = 1;
             int rBeamIndex = 1;
             int BeamIndex = 1;
@@ -354,7 +347,6 @@ namespace BeamName
             {
                 marker.NewCourse = (CourseNumber + i).ToString();
                 i++;
-
                 foreach (BeamViewModel beamViewModel in BeamViewModels)
                 {
                     beamViewModel.IsUserDefine = true;
@@ -367,7 +359,6 @@ namespace BeamName
                             beamViewModel.CourseNumber = int.Parse(marker.NewCourse);
                         }
                     }
-
                 }
             }
         }
@@ -377,7 +368,6 @@ namespace BeamName
             UpdateBeamCourseNumbers(CourseNumber);
             foreach (MarkerViewModel marker in MarkerViewModels)
             {
-                marker.NewCourse = CourseNumber.ToString();
                 foreach (BeamViewModel beamViewModel in BeamViewModels)
                 {
                     beamViewModel.IsUserDefine = false;
@@ -390,9 +380,29 @@ namespace BeamName
             }
         }
 
+        private void DoIsoRefresh()
+        {
+            foreach (MarkerViewModel marker in MarkerViewModels)
+            {
+                foreach (BeamViewModel beamViewModel in BeamViewModels)
+                {
+                    beamViewModel.IsUserDefine = true;
+                    Vector beamPosition = TransformToOrigin(new Vector(beamViewModel.IsocenterX, beamViewModel.IsocenterY, beamViewModel.IsocenterZ));
+                    if (IsNear(beamPosition, marker.Position))
+                    {
+                        beamViewModel.UserDefineLocation = marker.PositionId;
+                        if (int.TryParse(marker.NewCourse, out int value))
+                        {
+                            beamViewModel.CourseNumber = int.Parse(marker.NewCourse);
+                        }
+                    }
+                }
+            }
+        }
+
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (DifIsoIsChecked) DifIso_isChecked(null, null);
+            if (DifIsoIsChecked) DoIsoRefresh();
             else DifIso_isUnchecked(null, null);
         }
     }
