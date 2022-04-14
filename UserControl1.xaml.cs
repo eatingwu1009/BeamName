@@ -160,7 +160,7 @@ namespace BeamName
                     }
                 }
             }
-
+            DefaltCoursenumber();
             RefreshBeamName();
             InitializeComponent();
             DataContext = this;
@@ -365,7 +365,7 @@ namespace BeamName
 
         private void DifIso_isUnchecked(object sender, RoutedEventArgs e)
         {
-            UpdateBeamCourseNumbers(CourseNumber);
+            DefaltCoursenumber();
             foreach (MarkerViewModel marker in MarkerViewModels)
             {
                 foreach (BeamViewModel beamViewModel in BeamViewModels)
@@ -391,6 +391,28 @@ namespace BeamName
                     if (IsNear(beamPosition, marker.Position))
                     {
                         beamViewModel.UserDefineLocation = marker.PositionId;
+                        if (int.TryParse(marker.NewCourse, out int value))
+                        {
+                            beamViewModel.CourseNumber = int.Parse(marker.NewCourse);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void DefaltCoursenumber()
+        {
+            int i = 0;
+            foreach (MarkerViewModel marker in MarkerViewModels)
+            {
+                marker.NewCourse = (CourseNumber + i).ToString();
+                i++;
+                foreach (BeamViewModel beamViewModel in BeamViewModels)
+                {
+                    beamViewModel.IsUserDefine = true;
+                    Vector beamPosition = TransformToOrigin(new Vector(beamViewModel.IsocenterX, beamViewModel.IsocenterY, beamViewModel.IsocenterZ));
+                    if (IsNear(beamPosition, marker.Position))
+                    {
                         if (int.TryParse(marker.NewCourse, out int value))
                         {
                             beamViewModel.CourseNumber = int.Parse(marker.NewCourse);
